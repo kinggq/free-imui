@@ -2,9 +2,22 @@
   "name": "free-im",
   "version": "0.1.0",
   "private": true,
+  "description": "基于VUE3实现的即时通讯UI组件",
+  "main": "lib/index.min.js",
+  "module": "lib/index.esm.js",
+  "typings": "lib/index.d.ts",
+  "keyword": "vue3 imui typescript",
+  "license": "MIT",
+  "author": {
+    "name": "BaoGuoQ1ang",
+    "email": "18701094030@163.com"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "yarn build:clean && yarn build:lib && yarn build:esm-bundle && rimraf lib/demo.html",
+    "build:clean": "rimraf lib",
+    "build:lib": "vue-cli-service build --target lib --name index --dest lib packages/index.ts",
+    "build:esm-bundle": "rollup --config ./build/rollup.config.js"
   },
   "dependencies": {
     "core-js": "^3.6.5",
