@@ -9,8 +9,58 @@
         height: 100%;
         background: #448BE2;
         border-radius: 6px 0 0 6px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 0;
         .free-menu-top {
-            .free-icon-messages {}
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            .free-menu-avatar {
+                margin-bottom: 30px;
+            }
+            .free-menu-item {
+                padding: 10px 0;
+                cursor: pointer;
+                &.free-menu-active i {
+                    color: #fff;
+                }
+            }
+        }
+        .free-menu-bottom {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .free-icon-messages,
+        .free-icon-contacts,
+        .free-icon-menu {
+            font-family: 'iconfont';
+            font-size: 24px;
+            color: #9AC4F8;
+            
+        }
+        .free-icon-messages:before {
+            content: "\e622";
+        }
+        .free-icon-contacts:before {
+            content: "\e60f";
+        }
+        .free-icon-menu:before {
+            content: "\e626";
+        }
+    }
+    .free-sidebar {
+        width: 230px;
+        height: 100%;
+        position: relative;
+        background-color: #F8F8F9;
+        overflow-y: auto;
+        .free-messages-fiexd_top {
+            position: sticky;
+            top: 0;
         }
     }
 }

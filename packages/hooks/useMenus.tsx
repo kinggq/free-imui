@@ -1,22 +1,6 @@
 import { ref } from 'vue'
-const defaultMenus = [
-    {
-        key: 'messages',
-        title: '消息',
-        unread: 0,
-        click: null,
-        bottom: false,
-        render: () => <i class="free-icon-messages"/>
-    },
-    {
-        key: 'contacts',
-        title: '联系人',
-        unread: 0,
-        click: null,
-        bottom: false,
-        render: () => <i class="free-icon-contacts"/>,
-    }
-]
+import { MenuType } from '../_util/types'
+import { defaultMenus } from '../_util/constant'
 
 const defaultMenusIndex: {
     [key: string]: number
@@ -25,14 +9,7 @@ const defaultMenusIndex: {
     contacts: 1
 }
 
-interface MenuType {
-    key: string,
-    title: string,
-    unread: number,
-    click: null,
-    bottom: boolean,
-    render: () => JSX.Element | HTMLElement
-}
+
 
 function useMenus(customMenus: MenuType | undefined = undefined) {
     let menus = ref<MenuType[]>([])
@@ -53,5 +30,4 @@ function useMenus(customMenus: MenuType | undefined = undefined) {
 export {
     useMenus,
     defaultMenus,
-    MenuType
 }

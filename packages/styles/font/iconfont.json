@@ -1,0 +1,37 @@
+{
+  "id": "3461652",
+  "name": "free-im",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "27386251",
+      "name": "我的客户",
+      "font_class": "wodekehu",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "29417727",
+      "name": "评论",
+      "font_class": "pinglun",
+      "unicode": "e622",
+      "unicode_decimal": 58914
+    },
+    {
+      "icon_id": "29417731",
+      "name": "搜索",
+      "font_class": "sousuo",
+      "unicode": "e623",
+      "unicode_decimal": 58915
+    },
+    {
+      "icon_id": "29417745",
+      "name": "分类",
+      "font_class": "fenlei",
+      "unicode": "e626",
+      "unicode_decimal": 58918
+    }
+  ]
+}
