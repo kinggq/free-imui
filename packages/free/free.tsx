@@ -1,20 +1,23 @@
-import { defineComponent, ref } from "vue";
+import { defineComponent, ExtractPropTypes, ref } from "vue";
 import { useMenus } from '../hooks'
-import { isFunction } from '../_util'
-import { ContactType, MenuType } from "../_util/types";
+import { isFunction } from '../utils'
+import { MenuType } from "../utils/types";
+import { useExpose } from "../hooks/use-expose";
+import { ContactType } from '../contact/types'
+import {
+    makeNumericProp
+} from '../utils'
+const freeProps = {
+    width: makeNumericProp(860),
+    height: makeNumericProp(580)
+}
+
+export type FProps = ExtractPropTypes<typeof freeProps>
+
 export default defineComponent({
     name: 'free-im',
-    props: {
-        width: {
-            type: [ String, Number ],
-            default: 860
-        },
-        height: {
-            type: [ String, Number ],
-            default: 580
-        }
-    },
-    setup(props, { slots, expose }) {
+    props: freeProps,
+    setup(props, { slots }) {
         console.log(slots)
         const { width, height } = props
         const wrapper_style = {
@@ -64,23 +67,16 @@ export default defineComponent({
         }
 
         function renderSidebar() {
-            const content = () => {
-                let arr = []
-                for (let i = 1; i < 100; i++) {
-                    arr.push(<div>消息列表{i}</div>)
-                }
-                return arr
-            }
             return (
                 <>
                     <div class="free-sidebar free-sidebar-messages" v-show={ activeMenu.value === 'messages' }>
                         <div class="free-messages-fiexd_top">
                             { slots['messages-fixed-top'] ? slots['messages-fixed-top']() : '' }
                         </div>
-                        { content() }
+                        { renderMessages() }
                     </div>
                     <div class="free-sidebar free-sidebar-messages" v-show={ activeMenu.value === 'contacts' }>
-                        好友列表
+                        { renderContacts() }
                     </div>
                 </>
             )
@@ -88,11 +84,41 @@ export default defineComponent({
 
         function initContacts(_contacts: ContactType[]) {
             contacts.value = _contacts
+            sortContacts()
             console.log(contacts.value)
         }
 
+        function renderMessages() {
+            let curIndex: string | null = ''
+            return contacts.value.map(contact => {
+                
+                const node = [
+                    contact.group ? <div class="free-group-label">群</div> : <div class="free-group-label">联系人</div>,
+                    contact.sort !== curIndex ? <div class="free-index">{ contact.sort }</div> : '',
+                    <free-contact contact={contact} is-message />
+                ]
+                curIndex = contact.sort
+                return node
+            })
+        }
+
+        function renderContacts() {
+            return contacts.value.map(contact => {
+                return <free-contact contact={contact} />
+            })
+        }
+
+        function sortContacts() {
+            contacts.value.sort((a, b) => {
+                if (a.group) {
+                    return 1
+                }
+                return a.sort.localeCompare(b.sort);
+            })
+        }
+
         
-        expose({
+        useExpose({
             useMenus,
             initContacts
         })

@@ -1,24 +1,32 @@
-<script setup lang="ts">
-import { ref, onMounted } from 'vue';
+<script lang="ts">
+import { defineComponent, ref, onMounted } from 'vue';
 import { defaultContacts } from './_util/constant'
-const FreeIM = ref()
-onMounted(() => {
-  console.log(FreeIM.value)
-  if(FreeIM.value) {
-    FreeIM.value.initContacts(defaultContacts())
+import type { FreeInstance } from '../packages'
+
+export default defineComponent({
+  setup() {
+    const freeIM = ref<FreeInstance>()
+    onMounted(() => {
+        freeIM.value?.initContacts(defaultContacts)
+    })
+
+    return {
+      freeIM,
+    }
   }
-  
 })
+
 </script>
 <template>
   <div class="wrapp">
-    <free-im ref="FreeIM">
-      <template #messages-fixed-top>
+    <free-im ref="freeIM">
+      <!-- <template #messages-fixed-top>
         <div style="background-color: #FFF;">
           1111
         </div>
-      </template>
+      </template> -->
     </free-im>
+    <free-button ref="fbutton">11</free-button>
   </div>
 </template>
 <style scoped>

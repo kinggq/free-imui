@@ -1,6 +1,6 @@
 import { ref } from 'vue'
-import { MenuType } from '../_util/types'
-import { defaultMenus } from '../_util/constant'
+import { MenuType } from '../utils/types'
+import { defaultMenus } from '../utils/constant'
 
 const defaultMenusIndex: {
     [key: string]: number

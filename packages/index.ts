@@ -1,10 +1,11 @@
 import { App } from 'vue'
-import FreeIM from './free'
+import { FreeIM, FreeInstance } from './free'
 import FreeAvatar from './avatar'
 import FreeButton from './button'
+import FreeContact from './contact'
 import './styles'
 
-const components = [ FreeIM, FreeAvatar, FreeButton ]
+const components = [ FreeIM, FreeAvatar, FreeContact, FreeButton ]
 
 const install = (app:App) => {
     components.map(component => app.component(component.name, component))
@@ -13,7 +14,12 @@ const install = (app:App) => {
 export {
     FreeIM,
     FreeAvatar,
-    FreeButton
+    FreeButton,
+    FreeContact
+}
+
+export type {
+    FreeInstance
 }
 
 export default {
