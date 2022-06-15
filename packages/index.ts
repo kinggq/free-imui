@@ -3,9 +3,10 @@ import { FreeIM, FreeInstance } from './free'
 import FreeAvatar from './avatar'
 import FreeButton from './button'
 import FreeContact from './contact'
+import FreeMessages from './messages'
 import './styles'
 
-const components = [ FreeIM, FreeAvatar, FreeContact, FreeButton ]
+const components = [ FreeIM, FreeAvatar, FreeContact, FreeButton, FreeMessages ]
 
 const install = (app:App) => {
     components.map(component => app.component(component.name, component))
@@ -15,7 +16,8 @@ export {
     FreeIM,
     FreeAvatar,
     FreeButton,
-    FreeContact
+    FreeContact,
+    FreeMessages
 }
 
 export type {

@@ -9,12 +9,15 @@ const contactProps = {
 export default defineComponent({
     name: 'free-contact',
     props: contactProps,
-    setup(props) {
+    emits: ['click'],
+    setup(props, { emit }) {
         const { avatar, nickname, lastMessage, lastMessageTime } = props.contact
-
+        const onClick = () => {
+            emit('click', props.contact)
+        }
         return () => {
             return (
-                <div class="free-contact">
+                <div class="free-contact" onClick={ onClick }>
                     <free-avatar avatar={ avatar } />
                     {
                     props.isMessage ?

@@ -27,7 +27,7 @@ export const defaultMenus = [
 
 export const defaultContacts = [
     {
-        id: 1,
+        id: '1',
         nickname: '猪小明',
         avatar: '猪小明',
         sort: 'Z',
@@ -54,7 +54,7 @@ export const defaultContacts = [
         unread: 0
     },
     {
-        id: 3,
+        id: 8,
         nickname: '米线',
         avatar: '米线',
         sort: 'M',
@@ -64,7 +64,7 @@ export const defaultContacts = [
     },
     {
         id: 66,
-        nickname: '群聊',
+        nickname: '陈翔六点半',
         avatar: '群聊',
         sort: '',
         lastMessage: '文件已经发给你了',
@@ -80,5 +80,14 @@ export const defaultContacts = [
         lastMessage: '我的内容很长很长很长很长',
         lastMessageTime: 1655114917370,
         unread: 2
+    },
+    {
+        id: 5,
+        nickname: '张三',
+        avatar: '张三',
+        sort: 'Z',
+        lastMessage: '',
+        lastMessageTime: 1655114917370,
+        unread: 0
     },
 ]

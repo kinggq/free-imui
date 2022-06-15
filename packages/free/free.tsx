@@ -1,4 +1,4 @@
-import { defineComponent, ExtractPropTypes, ref } from "vue";
+import { defineComponent, ExtractPropTypes, reactive, ref } from "vue";
 import { useMenus } from '../hooks'
 import { isFunction } from '../utils'
 import { MenuType } from "../utils/types";
@@ -26,26 +26,32 @@ export default defineComponent({
         }
         const activeMenu = ref('messages')
         const contacts = ref<ContactType[]>([])
+        const groups = ref<ContactType[]>([])
+        const lastMessages = ref<ContactType[]>([])
+        const curContact = ref<ContactType>()
+        const currentContact = ref<ContactType>()
+        const allMessages = reactive(new Map())
+        const currentMessages = ref([])
         const menus = useMenus()
-        
+
         function renderMenuItem() {
             const top: HTMLElement | JSX.Element[] = []
-            const bottom: HTMLElement| JSX.Element[] = []
+            const bottom: HTMLElement | JSX.Element[] = []
             menus.value.forEach(menu => {
-                const node = <div class={`free-menu-item ${ activeMenu.value === menu.key ? 'free-menu-active':''}`} title={ menu.title } onClick={ () => {
+                const node = <div class={`free-menu-item ${activeMenu.value === menu.key ? 'free-menu-active' : ''}`} title={menu.title} onClick={() => {
                     isFunction(menu.click) ? menu.click : changeMenu(menu)
-                } }>
-                    { menu.render() }
+                }}>
+                    {menu.render()}
                 </div>
                 !menu.bottom ? top.push(node) : bottom.push(node)
             })
 
-            function changeMenu (menu: MenuType) {
+            function changeMenu(menu: MenuType) {
                 console.log(menu)
                 if (menu.bottom) return
                 activeMenu.value = menu.key
             }
-            
+
             return {
                 top,
                 bottom
@@ -57,10 +63,10 @@ export default defineComponent({
                 <div class="free-menu">
                     <div class="free-menu-top">
                         <free-avatar class="free-menu-avatar" />
-                        { renderMenuItem().top }
+                        {renderMenuItem().top}
                     </div>
                     <div class="free-menu-bottom">
-                        { renderMenuItem().bottom }
+                        {renderMenuItem().bottom}
                     </div>
                 </div>
             )
@@ -69,55 +75,132 @@ export default defineComponent({
         function renderSidebar() {
             return (
                 <>
-                    <div class="free-sidebar free-sidebar-messages" v-show={ activeMenu.value === 'messages' }>
+                    <div class="free-sidebar free-sidebar-messages" v-show={activeMenu.value === 'messages'}>
                         <div class="free-messages-fiexd_top">
-                            { slots['messages-fixed-top'] ? slots['messages-fixed-top']() : '' }
+                            {slots['messages-fixed-top'] ? slots['messages-fixed-top']() : ''}
                         </div>
-                        { renderMessages() }
+                        {renderMessages()}
                     </div>
-                    <div class="free-sidebar free-sidebar-messages" v-show={ activeMenu.value === 'contacts' }>
-                        { renderContacts() }
+                    <div class="free-sidebar free-sidebar-messages" v-show={activeMenu.value === 'contacts'}>
+                        {renderContacts()}
                     </div>
                 </>
             )
         }
 
         function initContacts(_contacts: ContactType[]) {
-            contacts.value = _contacts
+            _contacts.forEach(contact => {
+                if (contact.group) {
+                    groups.value.push(contact)
+                } else {
+                    contacts.value.push(contact)
+                }
+                if (contact.lastMessage) {
+                    lastMessages.value.push(contact)
+                }
+            })
+            if (lastMessages.value.length > 0) {
+                currentContact.value = lastMessages.value[0]
+            }
             sortContacts()
-            console.log(contacts.value)
         }
 
         function renderMessages() {
+            const click = (contacts: ContactType) => {
+                console.log(contacts)
+                currentContact.value = contacts
+            }
+
+            return lastMessages.value.map(contact => {
+
+                return <free-contact {...activeClass(contact.id, currentContact.value?.id)} onClick={click} contact={contact} is-message />
+            })
+        }
+
+        const activeClass = (id: number | string | null, curCid?: number | string | null) => {
+            return {
+                class: curCid === id ? 'free-contact-active' : ''
+            }
+        }
+
+        function renderContacts() {
+            const click = (data: ContactType) => {
+                curContact.value = data
+            }
+
             let curIndex: string | null = ''
-            return contacts.value.map(contact => {
-                
+            const contactNode = contacts.value.map(contact => {
                 const node = [
-                    contact.group ? <div class="free-group-label">群</div> : <div class="free-group-label">联系人</div>,
-                    contact.sort !== curIndex ? <div class="free-index">{ contact.sort }</div> : '',
-                    <free-contact contact={contact} is-message />
+                    contact.sort !== curIndex ? <div class="free-index">{contact.sort}</div> : '',
+                    <free-contact {...activeClass(contact.id, curContact.value?.id)} onClick={click} contact={contact} />
                 ]
                 curIndex = contact.sort
                 return node
             })
-        }
-
-        function renderContacts() {
-            return contacts.value.map(contact => {
-                return <free-contact contact={contact} />
-            })
+            return [
+                <div class="free-contact-category-label">群聊</div>,
+                groups.value.map(group => {
+                    return <free-contact {...activeClass(group.id)} onClick={click} contact={group} />
+                }),
+                <div class="free-contact-category-label">联系人</div>,
+                contactNode
+            ]
         }
 
         function sortContacts() {
             contacts.value.sort((a, b) => {
                 if (a.group) {
-                    return 1
+                    return a.sort.localeCompare(b.sort)
                 }
                 return a.sort.localeCompare(b.sort);
             })
         }
 
-        
+        function renderContent() {
+            const detailNode = () => {
+                if (activeMenu.value === 'contacts' && curContact.value) {
+                    if (slots['contact-detail']) {
+                        return slots['contact-detail']({ contact: curContact.value })
+                    }
+                    return (
+                        <div class="free-contact-main">
+                            <div class="free-contact-detail_header">
+                                <free-avatar avatar={curContact.value?.avatar} />
+                                <div class="free-contact-nickname">{curContact.value?.nickname}</div>
+                            </div>
+                            <div class="free-contact-detail_body">
+
+                            </div>
+                            <div class="free-contact-detail_footer">
+                                <free-button type="primary">发送</free-button>
+                            </div>
+                        </div>
+                    )
+                } else if (activeMenu.value === 'messages' && currentContact.value) {
+                    return (
+                        <div class="free-contact-main">
+                            <div class="free-contact-messages_header">
+                                <span>{ currentContact.value.nickname }</span>
+                                <i class="free-icon-more"></i>
+                            </div>
+                            <div class="free-contact-messages_body">
+                                <free-messages />
+                                <div class="free-editor"></div>
+                            </div>
+                        </div>
+                    )
+                }
+                return undefined
+            }
+
+            return (
+                <div class="free-content">
+                    {detailNode()}
+                </div>
+            )
+        }
+
+
         useExpose({
             useMenus,
             initContacts
@@ -125,9 +208,10 @@ export default defineComponent({
 
         return () => {
             return (
-                <div class={`free-wrapper free-theme-default`} style={ wrapper_style }>
-                    { renderMenu() }
-                    { renderSidebar() }
+                <div class={`free-wrapper free-theme-default`} style={wrapper_style}>
+                    {renderMenu()}
+                    {renderSidebar()}
+                    {renderContent()}
                 </div>
             )
         }

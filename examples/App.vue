@@ -4,8 +4,9 @@ import { defaultContacts } from './_util/constant'
 import type { FreeInstance } from '../packages'
 
 export default defineComponent({
-  setup() {
+  setup(_, {slots}) {
     const freeIM = ref<FreeInstance>()
+    
     onMounted(() => {
         freeIM.value?.initContacts(defaultContacts)
     })
@@ -24,6 +25,9 @@ export default defineComponent({
         <div style="background-color: #FFF;">
           1111
         </div>
+      </template> -->
+      <!-- <template #contact-detail="{ contact }">
+        <div>{{ contact }}</div>
       </template> -->
     </free-im>
     <free-button ref="fbutton">11</free-button>
