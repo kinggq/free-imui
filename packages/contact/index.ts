@@ -1,13 +1,13 @@
 import { withInstall } from '../utils'
 import _Contact from './contact'
 
-export const Contact = withInstall(_Contact)
+export const FreeContact = withInstall(_Contact)
 
-export default Contact
-// export type { Test } from './types'
+export default FreeContact
+export type { Contact } from './types'
 
 declare module 'vue' {
     export interface GlobalComponents {
-        _Contact: typeof Contact
+        _Contact: typeof FreeContact
     }
 }

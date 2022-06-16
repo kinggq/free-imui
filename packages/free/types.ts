@@ -1,9 +1,9 @@
 import { ComponentPublicInstance } from "vue"
-import { ContactType } from '../contact/types'
+import { Contact } from '../contact/types'
 import type { FProps } from './free'
 
 type FreeIMExpose = {
-    initContacts: (contacts: ContactType[]) => void
+    initContacts: (contacts: Contact[]) => void
 }
 
 export type FreeInstance = ComponentPublicInstance<

@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue';
-import { defaultContacts } from './_util/constant'
-import type { FreeInstance } from '../packages'
+import { defaultContacts, messages } from './_util/constant'
+import type { FreeInstance, Contact } from '../packages'
 
 export default defineComponent({
   setup(_, {slots}) {
@@ -11,8 +11,21 @@ export default defineComponent({
         freeIM.value?.initContacts(defaultContacts)
     })
 
+    const pullMessages = (contact: Contact, next: any) => {
+      console.log(contact)
+      if (contact.id === 2) {
+        setTimeout(() => {
+          next(messages, true)
+        }, 2000)
+      } else {
+        next([], true)
+      }
+      
+    }
+
     return {
       freeIM,
+      pullMessages
     }
   }
 })
@@ -20,7 +33,7 @@ export default defineComponent({
 </script>
 <template>
   <div class="wrapp">
-    <free-im ref="freeIM">
+    <free-im ref="freeIM" @pullMessages="pullMessages">
       <!-- <template #messages-fixed-top>
         <div style="background-color: #FFF;">
           1111

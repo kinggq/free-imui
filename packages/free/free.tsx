@@ -3,7 +3,7 @@ import { useMenus } from '../hooks'
 import { isFunction } from '../utils'
 import { MenuType } from "../utils/types";
 import { useExpose } from "../hooks/use-expose";
-import { ContactType } from '../contact/types'
+import { Contact } from '../contact/types'
 import {
     makeNumericProp
 } from '../utils'
@@ -17,20 +17,20 @@ export type FProps = ExtractPropTypes<typeof freeProps>
 export default defineComponent({
     name: 'free-im',
     props: freeProps,
-    setup(props, { slots }) {
-        console.log(slots)
+    setup(props, { slots, emit }) {
         const { width, height } = props
         const wrapper_style = {
             width: width + 'px',
             height: height + 'px'
         }
         const activeMenu = ref('messages')
-        const contacts = ref<ContactType[]>([])
-        const groups = ref<ContactType[]>([])
-        const lastMessages = ref<ContactType[]>([])
-        const curContact = ref<ContactType>()
-        const currentContact = ref<ContactType>()
-        const allMessages = reactive(new Map())
+        const contacts = ref<Contact[]>([])
+        const groups = ref<Contact[]>([])
+        const lastMessages = ref<Contact[]>([])
+        const curContact = ref<Contact>()
+        const currentContact = ref<Contact>()
+        const messagesBucket = reactive(new Map())
+        const endBucket = reactive(new Map())
         const currentMessages = ref([])
         const menus = useMenus()
 
@@ -88,7 +88,7 @@ export default defineComponent({
             )
         }
 
-        function initContacts(_contacts: ContactType[]) {
+        function initContacts(_contacts: Contact[]) {
             _contacts.forEach(contact => {
                 if (contact.group) {
                     groups.value.push(contact)
@@ -106,9 +106,19 @@ export default defineComponent({
         }
 
         function renderMessages() {
-            const click = (contacts: ContactType) => {
+            const click = (contacts: Contact) => {
                 console.log(contacts)
                 currentContact.value = contacts
+                emit('pull-messages', contacts, (messages: any, next: any) => {
+                    console.log(messages)
+                    if(messages.length === 0) {
+                        
+                    }
+                    if (messagesBucket.has(contacts.id)) {
+                        messagesBucket.get(contacts.id).push
+                    }
+                    messagesBucket.set(contacts.id, messages)
+                })
             }
 
             return lastMessages.value.map(contact => {
@@ -124,7 +134,7 @@ export default defineComponent({
         }
 
         function renderContacts() {
-            const click = (data: ContactType) => {
+            const click = (data: Contact) => {
                 curContact.value = data
             }
 
@@ -184,7 +194,7 @@ export default defineComponent({
                                 <i class="free-icon-more"></i>
                             </div>
                             <div class="free-contact-messages_body">
-                                <free-messages />
+                                <free-messages data={ messagesBucket.get(currentContact.value.id) } />
                                 <div class="free-editor"></div>
                             </div>
                         </div>

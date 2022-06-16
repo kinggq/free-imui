@@ -91,3 +91,24 @@ export const defaultContacts = [
         unread: 0
     },
 ]
+
+export const messages = [
+    {
+        id: 123423,
+        time: 1655350692388,
+        type: 'text',
+        status: 'success',
+        content: '明天就是周末了',
+        toContactId: 2,
+        from: ''
+    },
+    {
+        id: 123423,
+        time: 1655350692388,
+        type: 'text',
+        status: 'success',
+        content: '明天就是周末了',
+        toContactId: 2,
+        from: ''
+    },
+]

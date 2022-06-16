@@ -1,8 +1,8 @@
 import { defineComponent } from "vue";
-import { ContactType } from "./types";
+import { Contact } from "./types";
 import { makeObjectProp, makeBooleanProp, formatDay } from '../utils'
 const contactProps = {
-    contact: makeObjectProp<ContactType>(),
+    contact: makeObjectProp<Contact>(),
     isMessage: makeBooleanProp(false)
 }
 

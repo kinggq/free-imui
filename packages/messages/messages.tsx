@@ -1,24 +1,47 @@
 import { defineComponent, ref, nextTick } from "vue";
+import { makeArrayProp } from '../utils'
+
+const messagesProps = {
+    data: makeArrayProp()
+}
 
 export default defineComponent({
     name: 'free-messages',
-    setup() {
+    props: messagesProps,
+    setup(props) {
         const root = ref<HTMLElement>()
+        const loading = ref(false)
+
         const onScroll = (event: Event) => {
-            console.log(event)
+            const target = event.target as HTMLInputElement
+            if (target.scrollTop === 0) {
+                console.log('到顶部了')
+            }
         }
 
         nextTick(() => {
-            console.log(root)
+            if (root.value) {
+                root.value.scrollTop = root.value.scrollHeight
+            }
         })
-
-        window.addEventListener('scroll', onScroll)
 
         return () => {
             
             return (
-                <div ref={ root } class="free-messages" on-scroll={ onScroll }>
-                    
+                <div ref={ root } class="free-messages" onScroll={ onScroll }>
+                    <div class="free-messages-loading">
+                        <i class="free-icon-loading" v-show={loading}></i>
+                        <div class="free-messages-load_text" v-show={!loading}>暂无更多消息</div>
+                    </div>
+                    {
+                        props.data.map((msg: any) => {
+                            return (
+                                <div>
+                                    { msg.content }
+                                </div>
+                            )
+                        })
+                    }
                 </div>
             )
         }

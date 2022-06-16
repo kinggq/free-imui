@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "7712687",
+      "name": "loading",
+      "font_class": "loading",
+      "unicode": "e730",
+      "unicode_decimal": 59184
+    },
+    {
       "icon_id": "77822",
       "name": "更多",
       "font_class": "gengduo",

@@ -26,3 +26,8 @@ export const makeObjectProp = <T = unknown>() => ({
     type: Object as PropType<T>,
     required: true as const
 })
+
+export const makeArrayProp = <T = unknown>() => ({
+    type: Array as PropType<T[]>,
+    default: () => []
+})

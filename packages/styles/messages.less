@@ -1,4 +1,28 @@
 .free-messages {
     flex: 1;
+    height: auto;
     overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 10px;
+    .free-messages-loading {
+        text-align: center;
+        padding: 10px 0;
+        font-size: 12px;
+        color: #aaa;
+    }
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+    &::-webkit-scroll-button {
+        height: 6px;
+        width: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background-color: #888888;
+    }
+    &::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
 }

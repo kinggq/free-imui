@@ -1,4 +1,4 @@
-export interface ContactType {
+export type Contact = {
     id: string | number | null,
     nickname: string,
     avatar: string,
