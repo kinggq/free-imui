@@ -11,7 +11,7 @@ export default defineComponent({
         freeIM.value?.initContacts(defaultContacts)
     })
 
-    const pullMessages = (contact: Contact, next: any) => {
+    const pullMessages = (contact: Contact, next: any, count: number) => {
       console.log(contact)
       if (contact.id === 2) {
         setTimeout(() => {

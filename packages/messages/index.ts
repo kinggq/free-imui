@@ -1,14 +1,14 @@
 import { withInstall } from '../utils'
 import _Messages from './messages'
 
-export const Messages = withInstall(_Messages)
+export const FreeMessages = withInstall(_Messages)
 
-export default Messages
+export default FreeMessages
 
-export type { Test } from './types'
+export type { MessageInstance } from './types'
 
 declare module 'vue' {
     export interface GlobalComponents {
-        Messages: typeof Messages
+        Messages: typeof FreeMessages
     }
 }

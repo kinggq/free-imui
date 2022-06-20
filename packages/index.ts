@@ -3,7 +3,7 @@ import { FreeIM, FreeInstance } from './free'
 import FreeAvatar from './avatar'
 import FreeButton from './button'
 import { FreeContact, Contact } from './contact'
-import FreeMessages from './messages'
+import { FreeMessages, MessageInstance } from './messages'
 import './styles'
 
 const components = [ FreeIM, FreeAvatar, FreeContact, FreeButton, FreeMessages ]
@@ -22,6 +22,7 @@ export {
 
 export type {
     FreeInstance,
+    MessageInstance,
     Contact
 }
 
