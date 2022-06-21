@@ -19,7 +19,9 @@ export default defineComponent({
             const target = event.target as HTMLInputElement
             if (target.scrollTop === 0) {
                 console.log('到顶部了')
-                emit('load', length)
+                emit('load', (end: boolean) => {
+                    loading.value = !!end
+                })
             }
         }
 

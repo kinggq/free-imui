@@ -1,4 +1,4 @@
-import { defineComponent, ExtractPropTypes, reactive, ref } from "vue";
+import { defineComponent, ExtractPropTypes, reactive, ref, nextTick } from "vue";
 import { useMenus } from '../hooks'
 import { isFunction } from '../utils'
 import { MenuType } from "../utils/types";
@@ -34,7 +34,7 @@ export default defineComponent({
         const endBucket = reactive(new Map())
         const currentMessages = ref([])
         const menus = useMenus()
-        const msgRef = ref()
+        const msgRef = ref<MessageInstance | null>(null)
 
         function renderMenuItem() {
             const top: HTMLElement | JSX.Element[] = []
@@ -112,7 +112,9 @@ export default defineComponent({
                 currentContact.value = contact
                 console.log(contact)
                 // if (messagesBucket.has(contact.id)) return
-                pullMessages(contact)
+                if(!messagesBucket.has(contact.id)) {
+                    pullMessages()
+                }
             }
 
             return lastMessages.value.map(contact => {
@@ -121,10 +123,14 @@ export default defineComponent({
             })
         }
 
-        function pullMessages(contact: Contact) {
-            console.log(contact)
+
+        function pullMessages(isEnd?: (end: boolean) => void) {
+            // if (msgRef.value){
+            //     msgRef.value.loading.value = true
+            // }
+            const contact = currentContact.value!
             const len = messagesBucket.has(contact.id) ? messagesBucket.get(contact.id).length : 0
-            emit('pull-messages', contact, (messages: any, end: any) => {
+            emit('pull-messages', contact, async (messages: any, end: any) => {
                 console.log(messages)
                 if(messages.length === 0) {
                     
@@ -133,7 +139,10 @@ export default defineComponent({
                     messagesBucket.get(contact.id).push(...messages)
                 }
                 messagesBucket.set(contact.id, messages)
-
+                // if (msgRef.value){
+                //     msgRef.value.loading.value = false
+                // }
+                isEnd && isEnd(false)
             }, len)
         }
 
@@ -204,7 +213,7 @@ export default defineComponent({
                                 <i class="free-icon-more"></i>
                             </div>
                             <div class="free-contact-messages_body">
-                                <free-messages ref={ msgRef } data={ messagesBucket.get(currentContact.value.id) } />
+                                <free-messages ref={ msgRef } onLoad={ pullMessages } data={ messagesBucket.get(currentContact.value.id) } />
                                 <div class="free-editor"></div>
                             </div>
                         </div>

@@ -18,7 +18,9 @@ export default defineComponent({
           next(messages, true)
         }, 2000)
       } else {
-        next([], true)
+        setTimeout(() => {
+          next([], true)
+        }, 2000)
       }
       
     }

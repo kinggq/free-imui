@@ -1,8 +1,8 @@
 import type { MessageProps } from './messages'
-import { ComponentPublicInstance } from 'vue'
+import { ComponentPublicInstance, Ref } from 'vue'
 
 type MessageExpose = {
-    loading: boolean
+    loading: Ref
 }
 
 export type MessageInstance = ComponentPublicInstance<
