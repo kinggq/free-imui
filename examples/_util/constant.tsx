@@ -92,23 +92,19 @@ export const defaultContacts = [
     },
 ]
 
-export const messages = [
-    {
-        id: 123423,
-        time: 1655350692388,
-        type: 'text',
-        status: 'success',
-        content: '明天就是周末了',
-        toContactId: 2,
-        from: ''
-    },
-    {
-        id: 123423,
-        time: 1655350692388,
-        type: 'text',
-        status: 'success',
-        content: '明天就是周末了',
-        toContactId: 2,
-        from: ''
-    },
-]
+export const messages = (count: number) => {
+    const arr = []
+    console.log(count)
+    for(let i = count; i < count + 10; i++) {
+        arr.push({
+            id: i,
+            time: new Date().getTime(),
+            type: 'text',
+            status: 'success',
+            content: i,
+            toContactId: i % 2 === 0 ? '66' : i,
+            from: ''
+        })
+    }
+    return arr
+}

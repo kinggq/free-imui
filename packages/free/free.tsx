@@ -1,6 +1,6 @@
 import { defineComponent, ExtractPropTypes, reactive, ref, nextTick } from "vue";
 import { useMenus } from '../hooks'
-import { isFunction } from '../utils'
+import { isFunction, makeObjectProp } from '../utils'
 import { MenuType } from "../utils/types";
 import { useExpose } from "../hooks/use-expose";
 import { Contact } from '../contact/types'
@@ -10,7 +10,8 @@ import {
 } from '../utils'
 const freeProps = {
     width: makeNumericProp(860),
-    height: makeNumericProp(580)
+    height: makeNumericProp(580),
+    userInfo: makeObjectProp<Contact>()
 }
 
 export type FProps = ExtractPropTypes<typeof freeProps>
@@ -18,6 +19,11 @@ export type FProps = ExtractPropTypes<typeof freeProps>
 export default defineComponent({
     name: 'free-im',
     props: freeProps,
+    provide() {
+        return {
+            userInfo: this.userInfo
+        }
+    },
     setup(props, { slots, emit }) {
         const { width, height } = props
         const wrapper_style = {
@@ -113,8 +119,21 @@ export default defineComponent({
                 console.log(contact)
                 // if (messagesBucket.has(contact.id)) return
                 if(!messagesBucket.has(contact.id)) {
-                    pullMessages()
+                    // if (msgRef.value){
+                    //     msgRef.value.loading.value = true
+                    // }
+                    pullMessages(() => {
+                        if (msgRef.value){
+                            // msgRef.value.loading.value = false
+                            currentMessages.value = messagesBucket.get(contact.id)
+                        }
+                    })
+                } else {
+                    msgRef.value?.resetLoading()
+                    currentMessages.value = messagesBucket.get(contact.id)
                 }
+                
+                console.log(currentMessages.value)
             }
 
             return lastMessages.value.map(contact => {
@@ -125,20 +144,21 @@ export default defineComponent({
 
 
         function pullMessages(isEnd?: (end: boolean) => void) {
-            // if (msgRef.value){
-            //     msgRef.value.loading.value = true
-            // }
             const contact = currentContact.value!
             const len = messagesBucket.has(contact.id) ? messagesBucket.get(contact.id).length : 0
             emit('pull-messages', contact, async (messages: any, end: any) => {
-                console.log(messages)
+                
                 if(messages.length === 0) {
                     
                 }
+                console.log('添加前', messages)
                 if (messagesBucket.has(contact.id)) {
-                    messagesBucket.get(contact.id).push(...messages)
+                    messagesBucket.get(contact.id).unshift(...messages)
+                    console.log('添加后', messagesBucket.get(contact.id))
+                } else {
+                    messagesBucket.set(contact.id, messages)
                 }
-                messagesBucket.set(contact.id, messages)
+                
                 // if (msgRef.value){
                 //     msgRef.value.loading.value = false
                 // }
@@ -213,7 +233,7 @@ export default defineComponent({
                                 <i class="free-icon-more"></i>
                             </div>
                             <div class="free-contact-messages_body">
-                                <free-messages ref={ msgRef } onLoad={ pullMessages } data={ messagesBucket.get(currentContact.value.id) } />
+                                <free-messages ref={ msgRef } onLoad={ pullMessages } data={ currentMessages.value } />
                                 <div class="free-editor"></div>
                             </div>
                         </div>

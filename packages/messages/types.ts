@@ -2,7 +2,8 @@ import type { MessageProps } from './messages'
 import { ComponentPublicInstance, Ref } from 'vue'
 
 type MessageExpose = {
-    loading: Ref
+    loading: Ref,
+    resetLoading: () => void
 }
 
 export type MessageInstance = ComponentPublicInstance<
