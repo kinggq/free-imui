@@ -15,7 +15,8 @@ export default defineComponent({
       sort: 'C',
       lastMessage: '今天晚上直播',
       lastMessageTime: 1655114917359,
-      unread: 0
+      unread: 0,
+      
     }
 
     setTimeout(() => {
@@ -29,8 +30,13 @@ export default defineComponent({
       console.log(contact)
       if (contact.id === 2) {
         setTimeout(() => {
-          next(messages(_count), true)
-          _count += 10
+          if (_count < 20) {
+            next(messages(_count))
+            _count += 10
+          } else {
+            next([], true)
+          }
+          
         }, 2000)
       } else {
         setTimeout(() => {

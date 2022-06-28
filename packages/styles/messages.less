@@ -26,7 +26,50 @@
         background-color: transparent;
     }
     .free-message-right {
-        display: flex;
         flex-direction: row-reverse;
+        .free-message-info {
+            padding-right: 10px;
+        }
+        .free-message-username {
+            text-align: right;
+        }
+        .free-message-text:before {
+            right: -3px;
+        }
+    }
+    .free-message-left {
+        .free-message-info {
+            padding-left: 10px;
+        }
+        .free-message-username {
+            text-align: left;
+        }
+        .free-message-text:before {
+            left: -3px;
+        }
+    }
+    .free-message-content {
+        display: flex;
+        
+    }
+    .free-message-username {
+        color: #5A5A5A;
+        font-size: 12px;
+        padding-bottom: 4px;
+    }
+    .free-message-text {
+        border-radius: 4px;
+        padding: 8px 10px;
+        background-color: #F8F8F9;
+        position: relative;
+        &:before {
+            content: " ";
+            position: absolute;
+            top: 6px;
+            width: 6px;
+            height: 6px;
+            background-color: #F8F8F9;
+            transform: rotate(45deg);
+        }
     }
 }

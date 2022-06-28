@@ -37,7 +37,7 @@ export default defineComponent({
         const curContact = ref<Contact>()
         const currentContact = ref<Contact>()
         const messagesBucket = reactive(new Map())
-        const endBucket = reactive(new Map())
+        const messageLoadedBucket = reactive(new Map())
         const currentMessages = ref([])
         const menus = useMenus()
         const msgRef = ref<MessageInstance | null>(null)
@@ -116,24 +116,28 @@ export default defineComponent({
         function renderMessages() {
             const click = (contact: Contact) => {
                 currentContact.value = contact
-                console.log(contact)
+                console.log('messagesBucket:', messagesBucket)
+                currentMessages.value = []
+                msgRef.value?.resetLoading()
                 // if (messagesBucket.has(contact.id)) return
                 if(!messagesBucket.has(contact.id)) {
                     // if (msgRef.value){
                     //     msgRef.value.loading.value = true
                     // }
+                    msgRef.value?.resetLoading()
                     pullMessages(() => {
                         if (msgRef.value){
                             // msgRef.value.loading.value = false
                             currentMessages.value = messagesBucket.get(contact.id)
+                            msgRef.value.scrollToBottom()
                         }
                     })
                 } else {
-                    msgRef.value?.resetLoading()
+                    // msgRef.value?.loadend()
                     currentMessages.value = messagesBucket.get(contact.id)
+                    msgRef.value?.scrollToBottom()
                 }
                 
-                console.log(currentMessages.value)
             }
 
             return lastMessages.value.map(contact => {
@@ -151,18 +155,18 @@ export default defineComponent({
                 if(messages.length === 0) {
                     
                 }
-                console.log('添加前', messages)
+                
                 if (messagesBucket.has(contact.id)) {
                     messagesBucket.get(contact.id).unshift(...messages)
-                    console.log('添加后', messagesBucket.get(contact.id))
                 } else {
                     messagesBucket.set(contact.id, messages)
                 }
-                
+                messageLoadedBucket.set(contact.id, end)
+                if (end) msgRef.value?.loadend()
                 // if (msgRef.value){
                 //     msgRef.value.loading.value = false
                 // }
-                isEnd && isEnd(false)
+                isEnd && isEnd(!!end)
             }, len)
         }
 
@@ -205,6 +209,12 @@ export default defineComponent({
             })
         }
 
+        function currentLoadend() {
+            console.log(messageLoadedBucket)
+            return messageLoadedBucket.has(currentContact.value?.id) ? 
+            messageLoadedBucket.get(currentContact.value?.id) : false
+        }
+
         function renderContent() {
             const detailNode = () => {
                 if (activeMenu.value === 'contacts' && curContact.value) {
@@ -233,7 +243,7 @@ export default defineComponent({
                                 <i class="free-icon-more"></i>
                             </div>
                             <div class="free-contact-messages_body">
-                                <free-messages ref={ msgRef } onLoad={ pullMessages } data={ currentMessages.value } />
+                                <free-messages ref={ msgRef } onLoad={ pullMessages } data={ messagesBucket.get(currentContact.value.id) } is-end={ currentLoadend() } />
                                 <div class="free-editor"></div>
                             </div>
                         </div>

@@ -91,7 +91,18 @@ export const defaultContacts = [
         unread: 0
     },
 ]
-
+const msg = [
+    '您好，几点下班',
+    '九点半',
+    '提醒您衣物洗护好了',
+    '好的，周一取',
+    '好的，周一取',
+    '我是您的专属服务管家, 随时为您服务~',
+    '好的',
+    '周六可以看',
+    '价格我去帮您谈',
+    '价格还能谈',
+]
 export const messages = (count: number) => {
     const arr = []
     console.log(count)
@@ -101,9 +112,13 @@ export const messages = (count: number) => {
             time: new Date().getTime(),
             type: 'text',
             status: 'success',
-            content: i,
+            content: msg[i] ? msg [i] : i,
             toContactId: i % 2 === 0 ? '66' : i,
-            from: ''
+            from: {
+                id: i % 2 === 0 ? '66' : i,
+                username: i % 2 === 0 ? '陈翔' : '茅台',
+                avatar: i % 2 === 0 ? '陈翔' : '茅台',
+            }
         })
     }
     return arr
