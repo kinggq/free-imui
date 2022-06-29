@@ -105,7 +105,6 @@ const msg = [
 ]
 export const messages = (count: number) => {
     const arr = []
-    console.log(count)
     for(let i = count; i < count + 10; i++) {
         arr.push({
             id: i,
@@ -116,7 +115,7 @@ export const messages = (count: number) => {
             toContactId: i % 2 === 0 ? '66' : i,
             from: {
                 id: i % 2 === 0 ? '66' : i,
-                username: i % 2 === 0 ? '陈翔' : '茅台',
+                nickname: i % 2 === 0 ? '陈翔' : '茅台',
                 avatar: i % 2 === 0 ? '陈翔' : '茅台',
             }
         })

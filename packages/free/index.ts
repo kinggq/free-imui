@@ -8,7 +8,7 @@ export const FreeIM = withInstall(_FreeIM)
 
 export default FreeIM
 
-export type { FreeInstance } from './types'
+export type { FreeInstance, User } from './types'
 
 declare module 'vue' {
     export interface GlobalComponents {

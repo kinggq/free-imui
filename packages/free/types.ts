@@ -6,6 +6,12 @@ type FreeIMExpose = {
     initContacts: (contacts: Contact[]) => void
 }
 
+export type User = {
+    nickname: string
+    id: string | number
+    avatar: string
+}
+
 export type FreeInstance = ComponentPublicInstance<
     FProps,
     FreeIMExpose

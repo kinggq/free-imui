@@ -12,11 +12,6 @@ export default defineComponent({
       id: '66',
       nickname: '陈翔',
       avatar: '陈翔',
-      sort: 'C',
-      lastMessage: '今天晚上直播',
-      lastMessageTime: 1655114917359,
-      unread: 0,
-      
     }
 
     setTimeout(() => {
@@ -27,7 +22,6 @@ export default defineComponent({
     })
     let _count = 0
     const pullMessages = (contact: Contact, next: any, count: number) => {
-      console.log(contact)
       if (contact.id === 2) {
         setTimeout(() => {
           if (_count < 20) {
@@ -37,7 +31,7 @@ export default defineComponent({
             next([], true)
           }
           
-        }, 2000)
+        }, 5000)
       } else {
         setTimeout(() => {
           next([], true)
@@ -45,11 +39,17 @@ export default defineComponent({
       }
       
     }
+
+    const send = (contact: Contact, content: string) => {
+      console.log(contact, content);
+    }
+
     return {
       freeIM,
       pullMessages,
       arr,
-      userInfo
+      userInfo,
+      send
     }
   }
 })
@@ -59,7 +59,7 @@ export default defineComponent({
   <div class="wrapp">
     <!-- <Test/> -->
     <!-- <div v-for="item in arr">{{ item }}</div> -->
-    <free-im ref="freeIM" @pullMessages="pullMessages" :user-info="userInfo">
+    <free-im ref="freeIM" @pullMessages="pullMessages" @send="send" :user-info="userInfo">
       <!-- <template #messages-fixed-top>
         <div style="background-color: #FFF;">
           1111

@@ -1,17 +1,17 @@
-import { defineComponent, ExtractPropTypes, reactive, ref, nextTick } from "vue";
+import { defineComponent, ExtractPropTypes, reactive, ref, nextTick, computed } from "vue";
 import { useMenus } from '../hooks'
-import { isFunction, makeObjectProp } from '../utils'
+import { isFunction, makeObjectProp, guid } from '../utils'
 import { MenuType } from "../utils/types";
 import { useExpose } from "../hooks/use-expose";
 import { Contact } from '../contact/types'
-import { MessageInstance } from '../index'
+import { Message, User, MessageInstance } from '../index'
 import {
     makeNumericProp
 } from '../utils'
 const freeProps = {
     width: makeNumericProp(860),
     height: makeNumericProp(580),
-    userInfo: makeObjectProp<Contact>()
+    userInfo: makeObjectProp<User>()
 }
 
 export type FProps = ExtractPropTypes<typeof freeProps>
@@ -38,7 +38,8 @@ export default defineComponent({
         const currentContact = ref<Contact>()
         const messagesBucket = reactive(new Map())
         const messageLoadedBucket = reactive(new Map())
-        const currentMessages = ref([])
+        const loadingBucket = reactive(new Map())
+        const lockBucket = reactive(new Map())
         const menus = useMenus()
         const msgRef = ref<MessageInstance | null>(null)
 
@@ -55,7 +56,6 @@ export default defineComponent({
             })
 
             function changeMenu(menu: MenuType) {
-                console.log(menu)
                 if (menu.bottom) return
                 activeMenu.value = menu.key
             }
@@ -107,50 +107,46 @@ export default defineComponent({
                     lastMessages.value.push(contact)
                 }
             })
-            if (lastMessages.value.length > 0) {
-                currentContact.value = lastMessages.value[0]
-            }
+            // if (lastMessages.value.length > 0) {
+            //     currentContact.value = lastMessages.value[0]
+            // }
             sortContacts()
         }
 
         function renderMessages() {
             const click = (contact: Contact) => {
                 currentContact.value = contact
-                console.log('messagesBucket:', messagesBucket)
-                currentMessages.value = []
-                msgRef.value?.resetLoading()
-                // if (messagesBucket.has(contact.id)) return
                 if(!messagesBucket.has(contact.id)) {
-                    // if (msgRef.value){
-                    //     msgRef.value.loading.value = true
-                    // }
-                    msgRef.value?.resetLoading()
                     pullMessages(() => {
                         if (msgRef.value){
-                            // msgRef.value.loading.value = false
-                            currentMessages.value = messagesBucket.get(contact.id)
+                            
                             msgRef.value.scrollToBottom()
                         }
                     })
                 } else {
-                    // msgRef.value?.loadend()
-                    currentMessages.value = messagesBucket.get(contact.id)
+                    loadingBucket.set(contact.id, false)
                     msgRef.value?.scrollToBottom()
                 }
-                
             }
 
             return lastMessages.value.map(contact => {
-
                 return <free-contact {...activeClass(contact.id, currentContact.value?.id)} onClick={() => {click(contact)}} contact={contact} is-message />
             })
         }
 
 
         function pullMessages(isEnd?: (end: boolean) => void) {
+            
             const contact = currentContact.value!
+            if (lockBucket.has(contact.id)) return
+
             const len = messagesBucket.has(contact.id) ? messagesBucket.get(contact.id).length : 0
-            emit('pull-messages', contact, async (messages: any, end: any) => {
+            
+            loadingBucket.set(contact.id, true)
+            
+            lockBucket.set(contact.id, true)
+
+            emit('pull-messages', contact, async (messages: Message[], end: any) => {
                 
                 if(messages.length === 0) {
                     
@@ -162,10 +158,9 @@ export default defineComponent({
                     messagesBucket.set(contact.id, messages)
                 }
                 messageLoadedBucket.set(contact.id, end)
-                if (end) msgRef.value?.loadend()
-                // if (msgRef.value){
-                //     msgRef.value.loading.value = false
-                // }
+                
+                loadingBucket.set(contact.id, false)
+                lockBucket.delete(contact.id)
                 isEnd && isEnd(!!end)
             }, len)
         }
@@ -209,10 +204,48 @@ export default defineComponent({
             })
         }
 
-        function currentLoadend() {
-            console.log(messageLoadedBucket)
+        const currentLoadend = computed(() => {
             return messageLoadedBucket.has(currentContact.value?.id) ? 
             messageLoadedBucket.get(currentContact.value?.id) : false
+        })
+
+        const currentLoading = computed(() => {
+            if (loadingBucket.has(currentContact.value?.id)) {
+                return loadingBucket.get(currentContact.value?.id)
+            }
+            return true
+        })
+
+        const handleSend = (content: string) => {
+            console.log(content)
+            appendMessage(createMessage(content))
+            emit('send', currentContact.value, createMessage(content), (status: string) => {
+                messagesBucket.get(currentContact.value?.id).push()
+            })
+        }
+
+        function appendMessage(message: Message, scrollToBottom = true) {
+            if (messagesBucket.has(currentContact.value?.id)) {
+                messagesBucket.get(currentContact.value?.id).push(message)
+            } else {
+                messagesBucket.set(currentContact.value?.id, [message])
+            }
+
+            if (scrollToBottom) {
+                msgRef.value?.scrollToBottom()
+            }
+        }
+
+        function createMessage(text: string): Message {
+            return {
+                id: guid(),
+                time: new Date().getTime(),
+                type: 'text',
+                status: 'uploading',
+                content: text,
+                toContactId: currentContact.value?.id!,
+                from: props.userInfo
+            }
         }
 
         function renderContent() {
@@ -243,8 +276,8 @@ export default defineComponent({
                                 <i class="free-icon-more"></i>
                             </div>
                             <div class="free-contact-messages_body">
-                                <free-messages ref={ msgRef } onLoad={ pullMessages } data={ messagesBucket.get(currentContact.value.id) } is-end={ currentLoadend() } />
-                                <div class="free-editor"></div>
+                                <free-messages ref={ msgRef } onLoad={ pullMessages } data={ messagesBucket.get(currentContact.value.id) } is-end={ currentLoadend.value } loading={ currentLoading.value } />
+                                <free-editor onSend={ handleSend } />
                             </div>
                         </div>
                     )

@@ -1,0 +1,34 @@
+.free-editor {
+    display: flex;
+    flex-direction: column;
+    
+    &-tool {
+        height: 40px;
+    }
+    &-content {
+        flex: 1;
+        overflow-y: auto;
+    }
+    &-textarea {
+        height: 100%;
+        padding: 0 10px;
+        outline: none;
+        border: none;
+        
+    }
+    &-footer {
+        height: 50px;
+        display: flex;
+        align-items: center;
+        flex-direction: row-reverse;
+        padding: 0 10px;
+    }
+    &-footer__inner {
+        display: flex;
+        align-items: center;
+    }
+    &-footer__text {
+        font-size: 12px;
+        margin-right: 10px;
+    }
+}
