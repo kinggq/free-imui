@@ -33,7 +33,7 @@
         .free-message-username {
             text-align: right;
         }
-        .free-message-text:before {
+        .free-message-content__text:before {
             right: -3px;
         }
     }
@@ -44,7 +44,7 @@
         .free-message-username {
             text-align: left;
         }
-        .free-message-text:before {
+        .free-message-content__text:before {
             left: -3px;
         }
     }
@@ -57,7 +57,12 @@
         font-size: 12px;
         padding-bottom: 4px;
     }
-    .free-message-text {
+    .free-message-content__wrap {
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+    }
+    .free-message-content__text {
         border-radius: 4px;
         padding: 8px 10px;
         background-color: #F8F8F9;

@@ -2,9 +2,10 @@
 import { defineComponent, ref, nextTick, ExtractPropTypes, inject, computed } from "vue";
 import { useExpose } from '../hooks/use-expose';
 import { makeArrayProp, makeBooleanProp, makeNumericProp } from '../utils'
+import { Message } from "./types";
 
 const messagesProps = {
-    data: makeArrayProp(),
+    data: makeArrayProp<Message>(),
     contactId: makeNumericProp(''),
     isEnd: makeBooleanProp(false),
     loading: makeBooleanProp(true),
@@ -56,13 +57,19 @@ export default defineComponent({
         
         return () => {
             function innerMessages() {
-                return props.data.map((msg: any, index) => {
+                return props.data.map((msg, index) => {
                     return (
                         <div class={`free-message-content free-message-${ userInfo.id === msg.from.id ? 'right' : 'left'}`} style="height: 100px;" key={ msg.id }>
                             <free-avatar avatar={ msg.from.avatar } />
                             <div class="free-message-info">
-                                <div class="free-message-username">{ msg.from.username }</div>
-                                <div class="free-message-text">{ msg.content }</div>
+                                <div class="free-message-username">{ msg.from.nickname }</div>
+                                <div class="free-message-content__wrap">
+                                    <div class="free-message-content__text">{ msg.content }</div>
+                                    <div style="padding-left: 10px;"></div>
+                                    <div class="free-message-content__status">
+                                    <i class="free-icon-loading" v-show={ msg.status === 'uploading' }></i>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     )

@@ -1,5 +1,5 @@
 import { withInstall } from '../utils'
-import _Messages from './messages'
+import _Messages from './Messages'
 
 export const FreeMessages = withInstall(_Messages)
 

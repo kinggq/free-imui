@@ -1,4 +1,4 @@
-import type { MessageProps } from './messages'
+import type { MessageProps } from './Messages'
 import { ComponentPublicInstance, Ref } from 'vue'
 import { User } from '../free/types'
 

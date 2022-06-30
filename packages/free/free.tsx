@@ -36,7 +36,7 @@ export default defineComponent({
         const lastMessages = ref<Contact[]>([])
         const curContact = ref<Contact>()
         const currentContact = ref<Contact>()
-        const messagesBucket = reactive(new Map())
+        const messagesBucket = reactive(new Map<string | number, Message[]>())
         const messageLoadedBucket = reactive(new Map())
         const loadingBucket = reactive(new Map())
         const lockBucket = reactive(new Map())
@@ -140,7 +140,7 @@ export default defineComponent({
             const contact = currentContact.value!
             if (lockBucket.has(contact.id)) return
 
-            const len = messagesBucket.has(contact.id) ? messagesBucket.get(contact.id).length : 0
+            const len = messagesBucket.has(contact.id) ? messagesBucket.get(contact.id)?.length : 0
             
             loadingBucket.set(contact.id, true)
             
@@ -153,7 +153,7 @@ export default defineComponent({
                 }
                 
                 if (messagesBucket.has(contact.id)) {
-                    messagesBucket.get(contact.id).unshift(...messages)
+                    messagesBucket.get(contact.id)?.unshift(...messages)
                 } else {
                     messagesBucket.set(contact.id, messages)
                 }
@@ -218,15 +218,28 @@ export default defineComponent({
 
         const handleSend = (content: string) => {
             console.log(content)
-            appendMessage(createMessage(content))
-            emit('send', currentContact.value, createMessage(content), (status: string) => {
-                messagesBucket.get(currentContact.value?.id).push()
+            const message = createMessage(content)
+            appendMessage(message)
+            emit('send', currentContact.value, message, (status: string = 'success') => {
+                updateMessage(message, status)
             })
         }
 
-        function appendMessage(message: Message, scrollToBottom = true) {
+        function updateMessage(message: Message, status: string) {
+            if (!currentContact.value?.id) return
             if (messagesBucket.has(currentContact.value?.id)) {
-                messagesBucket.get(currentContact.value?.id).push(message)
+                const index = messagesBucket.get(currentContact.value?.id)?.findIndex(item => item.id === message.id)
+                if (index !== -1) {
+                    // let a = messagesBucket.get(currentContact.value?.id)![index]
+                }
+                
+            }
+        }
+
+        function appendMessage(message: Message, scrollToBottom = true) {
+            if (!currentContact.value) return
+            if (messagesBucket.has(currentContact.value?.id)) {
+                messagesBucket.get(currentContact.value?.id)?.push(message)
             } else {
                 messagesBucket.set(currentContact.value?.id, [message])
             }

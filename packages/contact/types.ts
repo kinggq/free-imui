@@ -1,5 +1,5 @@
 export type Contact = {
-    id: string | number | null,
+    id: string | number,
     nickname: string,
     avatar: string,
     sort: string,
