@@ -67,7 +67,8 @@ export default defineComponent({
                                     <div class="free-message-content__text">{ msg.content }</div>
                                     <div style="padding-left: 10px;"></div>
                                     <div class="free-message-content__status">
-                                    <i class="free-icon-loading" v-show={ msg.status === 'uploading' }></i>
+                                        <i class="free-icon-loading" v-show={ msg.status === 'uploading' }></i>
+                                        <i class="free-icon-error" v-show={ msg.status === 'error' }></i>
                                     </div>
                                 </div>
                             </div>

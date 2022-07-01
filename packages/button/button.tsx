@@ -8,10 +8,12 @@ const buttonProps = {
 export default defineComponent({
     name: 'free-button',
     props: buttonProps,
-    setup(props) {
+    setup(props, { slots }) {
         const cls = props.type
         return () => {
-            return <button class={`free-button free-button-${cls}`}>发送</button>
+            return <button class={`free-button free-button-${cls}`}>
+                { slots.default ? slots.default() : '' }
+            </button>
         }
     }
 })

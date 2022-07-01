@@ -40,7 +40,6 @@ export default defineComponent({
         const activeMenu = ref('messages')
         const contacts = ref<Contact[]>([])
         const groups = ref<Contact[]>([])
-        const lastMessages = ref<Contact[]>([])
         const curContact = ref<Contact>()
         const currentContact = ref<Contact>()
         const messagesBucket = reactive(new Map<string | number, Message[]>())
@@ -50,6 +49,22 @@ export default defineComponent({
         const menus = useMenus()
         const msgRef = ref<MessageInstance | null>(null)
 
+        const lastMessages = computed(() => {
+            const data = contacts.value.filter(contact => contact.lastMessage)
+            data.sort((c1, c2) => {
+                return (c2.lastMessageTime ? c2.lastMessageTime : 0) - (c1.lastMessageTime ? c1.lastMessageTime : 0)
+            })
+            return data
+        })
+
+        const allUnread = computed(() => {
+            let unread =  0
+            lastMessages.value.forEach(contact => {
+                unread += contact.unread
+            })
+            return unread
+        })
+
         function renderMenuItem() {
             const top: HTMLElement | JSX.Element[] = []
             const bottom: HTMLElement | JSX.Element[] = []
@@ -57,7 +72,13 @@ export default defineComponent({
                 const node = <div class={`free-menu-item ${activeMenu.value === menu.key ? 'free-menu-active' : ''}`} title={menu.title} onClick={() => {
                     isFunction(menu.click) ? menu.click : changeMenu(menu)
                 }}>
-                    {menu.render()}
+                    {
+                        menu.key === 'messages' ?
+                        <free-badge unread={ allUnread.value }>
+                           { menu.render() }
+                        </free-badge> : menu.render() 
+                    }
+                    
                 </div>
                 !menu.bottom ? top.push(node) : bottom.push(node)
             })
@@ -77,7 +98,7 @@ export default defineComponent({
             return (
                 <div class="free-menu">
                     <div class="free-menu-top">
-                        <free-avatar class="free-menu-avatar" />
+                        <free-avatar class="free-menu-avatar" avatar={ props.userInfo.avatar } />
                         {renderMenuItem().top}
                     </div>
                     <div class="free-menu-bottom">
@@ -110,18 +131,14 @@ export default defineComponent({
                 } else {
                     contacts.value.push(contact)
                 }
-                if (contact.lastMessage) {
-                    lastMessages.value.push(contact)
-                }
             })
-            // if (lastMessages.value.length > 0) {
-            //     currentContact.value = lastMessages.value[0]
-            // }
+            
             sortContacts()
         }
 
         function renderMessages() {
             const click = (contact: Contact) => {
+                updateUnread(contact)
                 currentContact.value = contact
                 if(!messagesBucket.has(contact.id)) {
                     pullMessages(() => {
@@ -137,14 +154,24 @@ export default defineComponent({
             }
 
             return lastMessages.value.map(contact => {
-                return <free-contact {...activeClass(contact.id, currentContact.value?.id)} onClick={() => {click(contact)}} contact={contact} is-message />
+                return (
+                    <free-contact {...activeClass(contact.id, currentContact.value?.id)} onClick={() => {click(contact)}} contact={contact} is-message />
+                )
             })
+        }
+
+        function updateUnread(contact: Contact) {
+            const index = findContactById(contact.id)
+            contacts.value[index].unread = 0
         }
 
 
         function pullMessages(isEnd?: (end: boolean) => void) {
             
             const contact = currentContact.value!
+            if (!messagesBucket.has(contact.id))
+                messagesBucket.set(contact.id, [])
+
             if (lockBucket.has(contact.id)) return
 
             const len = messagesBucket.has(contact.id) ? messagesBucket.get(contact.id)?.length : 0
@@ -159,11 +186,7 @@ export default defineComponent({
                     
                 }
                 
-                if (messagesBucket.has(contact.id)) {
-                    messagesBucket.get(contact.id)?.unshift(...messages)
-                } else {
-                    messagesBucket.set(contact.id, messages)
-                }
+                messagesBucket.get(contact.id)?.unshift(...messages)
                 messageLoadedBucket.set(contact.id, end)
                 
                 loadingBucket.set(contact.id, false)
@@ -227,28 +250,45 @@ export default defineComponent({
             console.log(content)
             const message = createMessage(content)
             appendMessage(message)
-            emit('send', currentContact.value, message, (status: MessageStatus = 'success') => {
-                updateMessage(message, status)
+            emit('send', currentContact.value, message, (message: Message, contact: Contact, status: MessageStatus = 'success') => {
+                updateMessage(message, contact, status)
+                updateContact(message, contact)
             })
         }
         
-        function updateMessage(message: Message, status: MessageStatus) {
-            if (!currentContact.value?.id) return
-            if (messagesBucket.has(currentContact.value?.id)) {
-                const index = messagesBucket.get(currentContact.value?.id)?.findIndex(item => item.id === message.id)
+        function updateMessage(message: Message, contact: Contact, status: MessageStatus) {
+            console.log(message, contact)
+            if (messagesBucket.has(contact.id)) {
+                const index = messagesBucket.get(contact.id)?.findIndex(item => item.id === message.id)
+                console.log(index)
                 if (index !== -1) {
-                    messagesBucket.get(currentContact.value?.id)![index!].status = status
+                    messagesBucket.get(contact.id)![index!].status = status
                 }
                 
             }
         }
 
+        function updateContact(message: Message, contact: Contact) {
+            const index = findContactById(contact.id)
+            console.log(index)
+            console.log(contacts)
+            if (index > -1) {
+                contacts.value[index].lastMessage = message.content
+                contacts.value[index].lastMessageTime = message.time
+                contacts.value[index].lastMessageStatus = message.status
+            }
+        }
+
+        function findContactById(id: string | number) {
+            if (!id) return -1
+            return contacts.value.findIndex(item => item.id === id)
+        }
+
         function appendMessage(message: Message, scrollToBottom = true) {
-            if (!currentContact.value) return
-            if (messagesBucket.has(currentContact.value?.id)) {
-                messagesBucket.get(currentContact.value?.id)?.push(message)
+            if (messagesBucket.has(message.toContactId)) {
+                messagesBucket.get(message.toContactId)?.push(message)
             } else {
-                messagesBucket.set(currentContact.value?.id, [message])
+                // updateContact(message)
             }
 
             if (scrollToBottom) {

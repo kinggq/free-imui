@@ -1,4 +1,4 @@
-import { defineComponent } from "vue";
+import { defineComponent, toRefs } from "vue";
 import { Contact } from "./types";
 import { makeObjectProp, makeBooleanProp, formatDay } from '../utils'
 const contactProps = {
@@ -11,29 +11,35 @@ export default defineComponent({
     props: contactProps,
     emits: ['click'],
     setup(props, { emit }) {
-        const { avatar, nickname, lastMessage, lastMessageTime } = props.contact
+        
+        
         const onClick = () => {
             emit('click', props.contact)
         }
         return () => {
             return (
                 <div class="free-contact" onClick={ onClick }>
-                    <free-avatar avatar={ avatar } />
+                    <free-badge unread={ props.contact.unread }>
+                        <free-avatar avatar={ props.contact.avatar } />
+                    </free-badge>
                     {
                     props.isMessage ?
 
                     <div class="contact-content">
                         <div class="contact-info">
-                            <div class="contact-nickname">{ nickname }</div>
-                            <div class="contact-lastmsg-time" v-show={ props.isMessage }>{ lastMessageTime && formatDay(lastMessageTime) }</div>
+                            <div class="contact-nickname">{ props.contact.nickname }</div>
+                            <div class="contact-lastmsg-time" v-show={ props.isMessage }>{ props.contact.lastMessageTime && formatDay(props.contact.lastMessageTime) }</div>
                         </div>
                         <div class="contact-action" v-show={ props.isMessage }>
-                            <div class="contact-lastmsg">{ lastMessage }</div>
+                            <div class="contact-content-inner">
+                                <i class="free-icon-error" v-show={ props.contact.lastMessageStatus === 'error' }></i>
+                                <div class="contact-lastmsg">{ props.contact.lastMessage }</div>
+                            </div>
                             <div class="contact-ban"></div>
                         </div>
                     </div>
                     :
-                    <div class="contact--nickname">{ nickname }</div>}
+                    <div class="contact--nickname">{ props.contact.nickname }</div>}
                 </div>
             )
         }

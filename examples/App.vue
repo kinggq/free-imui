@@ -1,78 +1,85 @@
-<script lang="ts">
-import { defineComponent, ref, onMounted, nextTick } from 'vue';
+<script lang="ts" setup>
+import { ref, onMounted, reactive } from 'vue';
 import { defaultContacts, messages } from './_util/constant'
 import type { FreeInstance, Contact } from '../packages'
-import Test from './test'
-export default defineComponent({
-  components: {Test},
-  setup(_, {slots}) {
-    const freeIM = ref<FreeInstance>()
-    const arr = ref([1,2,3,4])
-    const userInfo = {
-      id: '66',
-      nickname: '陈翔',
-      avatar: '陈翔',
-    }
 
-    setTimeout(() => {
-      arr.value.push(...[5,6,7,8])
-    }, 3000)
-    onMounted(() => {
-        freeIM.value?.initContacts(defaultContacts)
-    })
-    let _count = 0
-    const pullMessages = (contact: Contact, next: any, count: number) => {
-      if (contact.id === 2) {
-        setTimeout(() => {
-          if (_count < 20) {
-            next(messages(_count))
-            _count += 10
-          } else {
-            next([], true)
-          }
-          
-        }, 5000)
-      } else {
-        setTimeout(() => {
-          next([], true)
-        }, 2000)
-      }
-      
-    }
+const freeIM = ref<FreeInstance>()
 
-    const send = (contact: Contact, content: string, next: () => {}) => {
-      console.log(contact, content);
-      setTimeout(() => {
-        next()
-      }, 1000)
-    }
+const obj = ref([{name: '1'}, {name: 2}, {name: 3}])
 
-    return {
-      freeIM,
-      pullMessages,
-      arr,
-      userInfo,
-      send
-    }
-  }
+obj.value[0].name = 'antfu'
+console.log(obj)
+
+const userInfo = {
+  id: '66',
+  nickname: '陈翔',
+  avatar: '陈翔',
+}
+
+
+onMounted(() => {
+  freeIM.value?.initContacts(defaultContacts)
 })
+
+let _count = 0
+const pullMessages = (contact: Contact, next: any, count: number) => {
+  if (contact.id === 2) {
+    setTimeout(() => {
+      if (_count < 20) {
+        next(messages(_count))
+        _count += 10
+      } else {
+        next([], true)
+      }
+    }, 5000)
+  } else {
+    setTimeout(() => {
+      next([], true)
+    }, 2000)
+  }
+
+}
+
+const send = (contact: Contact, messages: string, next: any) => {
+  // console.log(contact, messages);
+  setTimeout(() => {
+    next(messages, contact, 'error')
+  }, 3000)
+}
+
+
+const msgFixedTop = ref(false)
+const toggleMessageTop = () => {
+  msgFixedTop.value = !msgFixedTop.value
+}
+
 </script>
 <template>
-  
   <div class="wrapp">
+    <div v-for="item in obj" :key="item.name">
+      {{ item.name }}
+    </div>
     <!-- <Test/> -->
     <!-- <div v-for="item in arr">{{ item }}</div> -->
     <free-im ref="freeIM" @pullMessages="pullMessages" @send="send" :user-info="userInfo">
-      <!-- <template #messages-fixed-top>
+    
+      <template v-if="msgFixedTop" #messages-fixed-top>
         <div style="background-color: #FFF;">
-          1111
+          <input type="text"
+            style="
+            
+            "
+          >
         </div>
-      </template> -->
+      </template>
       <!-- <template #contact-detail="{ contact }">
         <div>{{ contact }}</div>
       </template> -->
     </free-im>
-    <free-button ref="fbutton">11</free-button>
+    
+  </div>
+  <div>
+    <free-button @click="toggleMessageTop">消息列表头部插槽</free-button>
   </div>
 </template>
 <style scoped>

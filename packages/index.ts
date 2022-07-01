@@ -3,6 +3,7 @@ import { FreeIM, FreeInstance, User } from './free'
 import FreeAvatar from './avatar'
 import FreeButton from './button'
 import { FreeContact, Contact } from './contact'
+import { FreeBadge } from './badge'
 
 import {
     FreeMessages,
@@ -15,9 +16,9 @@ import {
 import { FreeEditor } from './editor'
 import './styles'
 
-const components = [ FreeIM, FreeAvatar, FreeContact, FreeButton, FreeMessages, FreeEditor ]
+const components = [FreeIM, FreeAvatar, FreeContact, FreeButton, FreeMessages, FreeEditor, FreeBadge]
 
-const install = (app:App) => {
+const install = (app: App) => {
     components.map(component => app.component(component.name, component))
 }
 

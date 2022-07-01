@@ -1,3 +1,4 @@
+import { Contact } from '../../packages'
 export const defaultMenus = [
     {
         key: 'messages',
@@ -25,15 +26,16 @@ export const defaultMenus = [
     }
 ]
 
-export const defaultContacts = [
+export const defaultContacts: Contact[] = [
     {
         id: '1',
         nickname: '猪小明',
         avatar: '猪小明',
         sort: 'Z',
         lastMessage: '今天几点下班？哈哈哈哈哈哈哈',
-        lastMessageTime: 1655114917359,
-        unread: 0
+        lastMessageTime: 1656668389920,
+        lastMessageStatus: 'success',
+        unread: 100
     },
     {
         id: 2,
@@ -42,6 +44,7 @@ export const defaultContacts = [
         sort: 'M',
         lastMessage: '晚一点',
         lastMessageTime: 1655114917370,
+        lastMessageStatus: 'success',
         unread: 0
     },
     {
@@ -51,6 +54,7 @@ export const defaultContacts = [
         sort: 'L',
         lastMessage: '今晚一起看电影吗',
         lastMessageTime: 1655114917370,
+        lastMessageStatus: 'success',
         unread: 0
     },
     {
@@ -60,6 +64,7 @@ export const defaultContacts = [
         sort: 'M',
         lastMessage: '文件已经发给你了',
         lastMessageTime: 1655114917370,
+        lastMessageStatus: 'success',
         unread: 2
     },
     {
@@ -69,6 +74,7 @@ export const defaultContacts = [
         sort: '',
         lastMessage: '文件已经发给你了',
         lastMessageTime: 1655114917370,
+        lastMessageStatus: 'success',
         unread: 2,
         group: true
     },
@@ -78,8 +84,9 @@ export const defaultContacts = [
         avatar: '很长',
         sort: 'H',
         lastMessage: '我的内容很长很长很长很长',
+        lastMessageStatus: 'success',
         lastMessageTime: 1655114917370,
-        unread: 2
+        unread: 6
     },
     {
         id: 5,
@@ -88,6 +95,7 @@ export const defaultContacts = [
         sort: 'Z',
         lastMessage: '',
         lastMessageTime: 1655114917370,
+        lastMessageStatus: 'success',
         unread: 0
     },
 ]
