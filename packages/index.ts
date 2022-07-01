@@ -3,7 +3,15 @@ import { FreeIM, FreeInstance, User } from './free'
 import FreeAvatar from './avatar'
 import FreeButton from './button'
 import { FreeContact, Contact } from './contact'
-import { FreeMessages, MessageInstance, Message } from './messages'
+
+import {
+    FreeMessages,
+    MessageInstance,
+    Message,
+    MessageStatus,
+    MessageType
+} from './messages'
+
 import { FreeEditor } from './editor'
 import './styles'
 
@@ -27,7 +35,9 @@ export type {
     MessageInstance,
     Contact,
     Message,
-    User
+    User,
+    MessageStatus,
+    MessageType
 }
 
 export default {

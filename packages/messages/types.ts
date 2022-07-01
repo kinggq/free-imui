@@ -2,11 +2,15 @@ import type { MessageProps } from './Messages'
 import { ComponentPublicInstance, Ref } from 'vue'
 import { User } from '../free/types'
 
+export type MessageStatus = 'success' | 'error' | 'uploading'
+
+export type MessageType = 'text' | 'image' | 'file'
+
 export type Message = {
     id: string | number,
     time: number,
-    type: 'text' | 'image' | 'file',
-    status: 'success' | 'error' | 'uploading',
+    type: MessageType,
+    status: MessageStatus,
     content: string,
     toContactId: string | number,
     from: User

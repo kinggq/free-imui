@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent, ref, onMounted, nextTick } from 'vue';
 import { defaultContacts, messages } from './_util/constant'
 import type { FreeInstance, Contact } from '../packages'
 import Test from './test'
@@ -40,8 +40,11 @@ export default defineComponent({
       
     }
 
-    const send = (contact: Contact, content: string) => {
+    const send = (contact: Contact, content: string, next: () => {}) => {
       console.log(contact, content);
+      setTimeout(() => {
+        next()
+      }, 1000)
     }
 
     return {

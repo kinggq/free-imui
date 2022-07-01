@@ -5,7 +5,8 @@ export const FreeMessages = withInstall(_Messages)
 
 export default FreeMessages
 
-export type { MessageInstance, Message } from './types'
+export type { MessageInstance, Message, MessageStatus,
+    MessageType } from './types'
 
 declare module 'vue' {
     export interface GlobalComponents {

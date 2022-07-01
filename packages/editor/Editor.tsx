@@ -21,6 +21,11 @@ export default defineComponent({
         function handleSend() {
             console.log('发送')
             emit('send', textarea.value?.innerHTML)
+            clear()
+        }
+        
+        function clear() {
+            textarea.value!.innerHTML = ''
         }
 
         return () => {

@@ -4,7 +4,14 @@ import { isFunction, makeObjectProp, guid } from '../utils'
 import { MenuType } from "../utils/types";
 import { useExpose } from "../hooks/use-expose";
 import { Contact } from '../contact/types'
-import { Message, User, MessageInstance } from '../index'
+import {
+    Message,
+    User,
+    MessageInstance,
+    MessageStatus,
+    MessageType
+} from '../index'
+
 import {
     makeNumericProp
 } from '../utils'
@@ -220,17 +227,17 @@ export default defineComponent({
             console.log(content)
             const message = createMessage(content)
             appendMessage(message)
-            emit('send', currentContact.value, message, (status: string = 'success') => {
+            emit('send', currentContact.value, message, (status: MessageStatus = 'success') => {
                 updateMessage(message, status)
             })
         }
-
-        function updateMessage(message: Message, status: string) {
+        
+        function updateMessage(message: Message, status: MessageStatus) {
             if (!currentContact.value?.id) return
             if (messagesBucket.has(currentContact.value?.id)) {
                 const index = messagesBucket.get(currentContact.value?.id)?.findIndex(item => item.id === message.id)
                 if (index !== -1) {
-                    // let a = messagesBucket.get(currentContact.value?.id)![index]
+                    messagesBucket.get(currentContact.value?.id)![index!].status = status
                 }
                 
             }
