@@ -53,6 +53,22 @@ const toggleMessageTop = () => {
   msgFixedTop.value = !msgFixedTop.value
 }
 
+const appendMessage = () => {
+  freeIM.value?.appendMessage({
+      id: '66',
+      time: new Date().getTime(),
+      type: 'text',
+      status: 'success',
+      content: '我发了一条消息给你',
+      toContactId: '66',
+      from: {
+          id: 3,
+          nickname: '冷檬',
+          avatar: '冷檬',
+      }
+  })
+}
+
 </script>
 <template>
   <div class="wrapp">
@@ -79,6 +95,7 @@ const toggleMessageTop = () => {
     
   </div>
   <div>
+    <free-button @click="appendMessage">发送一条消息</free-button>
     <free-button @click="toggleMessageTop">消息列表头部插槽</free-button>
   </div>
 </template>

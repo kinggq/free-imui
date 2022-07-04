@@ -252,7 +252,7 @@ export default defineComponent({
             appendMessage(message)
             emit('send', currentContact.value, message, (message: Message, contact: Contact, status: MessageStatus = 'success') => {
                 updateMessage(message, contact, status)
-                updateContact(message, contact)
+                updateContact(message)
             })
         }
         
@@ -268,14 +268,17 @@ export default defineComponent({
             }
         }
 
-        function updateContact(message: Message, contact: Contact) {
-            const index = findContactById(contact.id)
-            console.log(index)
-            console.log(contacts)
+        function updateContact(message: Message, unread?: number) {
+            const index = findContactById(message.toContactId)
+            console.log(contacts.value[index])
             if (index > -1) {
                 contacts.value[index].lastMessage = message.content
                 contacts.value[index].lastMessageTime = message.time
                 contacts.value[index].lastMessageStatus = message.status
+
+                if (unread){
+                    contacts.value[index].unread += unread
+                }
             }
         }
 
@@ -285,10 +288,17 @@ export default defineComponent({
         }
 
         function appendMessage(message: Message, scrollToBottom = true) {
-            if (messagesBucket.has(message.toContactId)) {
-                messagesBucket.get(message.toContactId)?.push(message)
+            console.log(message)
+            if (!messagesBucket.has(message.toContactId)) {
+                if(message.toContactId == currentContact.value?.id) {
+                    updateContact(message)
+                } else {
+                    updateContact(message, 1)
+                }
+                
             } else {
-                // updateContact(message)
+                messagesBucket.get(message.toContactId)?.push(message)
+                updateContact(message)
             }
 
             if (scrollToBottom) {
@@ -355,7 +365,8 @@ export default defineComponent({
 
         useExpose({
             useMenus,
-            initContacts
+            initContacts,
+            appendMessage
         })
 
         return () => {
