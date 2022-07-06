@@ -1,6 +1,6 @@
 import { defineComponent, ExtractPropTypes, reactive, ref, nextTick, computed } from "vue";
 import { useMenus } from '../hooks'
-import { isFunction, makeObjectProp, guid } from '../utils'
+import { isFunction, makeObjectProp, guid, isArray } from '../utils'
 import { MenuType } from "../utils/types";
 import { useExpose } from "../hooks/use-expose";
 import { Contact } from '../contact/types'
@@ -185,8 +185,8 @@ export default defineComponent({
                 if(messages.length === 0) {
                     
                 }
-                
-                messagesBucket.get(contact.id)?.unshift(...messages)
+                addMessage(messages, contact.id, 'unshift')
+                // messagesBucket.get(contact.id)?.unshift(...messages)
                 messageLoadedBucket.set(contact.id, end)
                 
                 loadingBucket.set(contact.id, false)
@@ -252,7 +252,13 @@ export default defineComponent({
             appendMessage(message)
             emit('send', currentContact.value, message, (message: Message, contact: Contact, status: MessageStatus = 'success') => {
                 updateMessage(message, contact, status)
-                updateContact(message)
+                updateContact({
+                    id: contact.id,
+                    lastMessageTime: message.time,
+                    lastMessage: message.content,
+                    lastMessageStatus: message.status,
+                    unread: 0
+                })
             })
         }
         
@@ -268,42 +274,77 @@ export default defineComponent({
             }
         }
 
-        function updateContact(message: Message, unread?: number) {
-            const index = findContactById(message.toContactId)
-            console.log(contacts.value[index])
-            if (index > -1) {
-                contacts.value[index].lastMessage = message.content
-                contacts.value[index].lastMessageTime = message.time
-                contacts.value[index].lastMessageStatus = message.status
-
-                if (unread){
-                    contacts.value[index].unread += unread
-                }
+        function updateContact(data: any) {
+            const id = data.id
+            delete data.id
+            const index = findContactById(id)
+            if (index !== -1) {
+                data.unread = data.unread + contacts.value[index].unread
+                contacts.value[index] = { ...contacts.value[index], ...data }
             }
+            
+            // let index: number
+            // if (message.toContactId === props.userInfo.id) {
+            //     index = findContactById(message.from.id)
+            // } else {
+            //     index = findContactById(message.toContactId)
+            // }
+            
+            // console.log(contacts.value[index])
+            // if (index > -1) {
+            //     contacts.value[index].lastMessage = message.content
+            //     contacts.value[index].lastMessageTime = message.time
+            //     contacts.value[index].lastMessageStatus = message.status
+
+            //     if (unread){
+            //         contacts.value[index].unread += unread
+            //     }
+            // }
         }
 
         function findContactById(id: string | number) {
             if (!id) return -1
             return contacts.value.findIndex(item => item.id === id)
         }
+        /* 
 
-        function appendMessage(message: Message, scrollToBottom = true) {
+        */
+        function appendMessage(message: Message, scrollToBottom = false) {
             console.log(message)
             if (!messagesBucket.has(message.toContactId)) {
-                if(message.toContactId == currentContact.value?.id) {
-                    updateContact(message)
-                } else {
-                    updateContact(message, 1)
-                }
+                updateContact({
+                    id: message.toContactId,
+                    unread: 1,
+                    lastMessageTime: message.time,
+                    lastMessage: message.content
+                })
                 
             } else {
-                messagesBucket.get(message.toContactId)?.push(message)
-                updateContact(message)
+                addMessage(message, message.toContactId, 'push')
+                const updateContactData = {
+                    id: message.toContactId,
+                    lastMessageTime: message.time,
+                    lastMessage: message.content,
+                    lastMessageStatus: message.status,
+                    unread: 0
+                }
+                if (message.toContactId === currentContact.value?.id) {
+                    msgRef.value?.scrollToBottom()
+                } else {
+                    updateContactData.unread = 1
+                }
+                updateContact(updateContactData)
             }
 
-            if (scrollToBottom) {
-                msgRef.value?.scrollToBottom()
-            }
+            // if (scrollToBottom) {
+            //     msgRef.value?.scrollToBottom()
+            // }
+        }
+
+        function addMessage(message: Message | Message[], contactId: string | number, type: 'unshift' | 'push') {
+            if (!isArray(message)) message = [ message ]
+            messagesBucket.set(contactId, messagesBucket.get(contactId) || [])
+            messagesBucket.get(contactId)![type](...message)
         }
 
         function createMessage(text: string): Message {

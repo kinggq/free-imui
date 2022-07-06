@@ -60,7 +60,7 @@ const appendMessage = () => {
       type: 'text',
       status: 'success',
       content: '我发了一条消息给你',
-      toContactId: '66',
+      toContactId: 3,
       from: {
           id: 3,
           nickname: '冷檬',
