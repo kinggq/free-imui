@@ -9,6 +9,7 @@ const messagesProps = {
     contactId: makeNumericProp(''),
     isEnd: makeBooleanProp(false),
     loading: makeBooleanProp(true),
+    messageName: makeBooleanProp(false)
 }
 
 export type MessageProps = ExtractPropTypes<typeof messagesProps>
@@ -60,9 +61,9 @@ export default defineComponent({
                 return props.data.map((msg, index) => {
                     return (
                         <div class={`free-message-content free-message-${ userInfo.id === msg.from.id ? 'right' : 'left'}`} style="height: 100px;" key={ msg.id }>
-                            <free-avatar avatar={ msg.from.avatar } />
+                            <free-avatar avatar={ msg.from.avatar } size={ 36 } />
                             <div class="free-message-info">
-                                <div class="free-message-username">{ msg.from.nickname }</div>
+                                <div class="free-message-username" v-show={ props.messageName }>{ msg.from.nickname }</div>
                                 <div class="free-message-content__wrap">
                                     <div class="free-message-content__text">{ msg.content }</div>
                                     <div style="padding-left: 10px;"></div>

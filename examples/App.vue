@@ -69,6 +69,11 @@ const appendMessage = () => {
   })
 }
 
+const showMessageName = ref(false)
+const toggleMessageName = () => {
+  showMessageName.value = !showMessageName.value
+}
+
 </script>
 <template>
   <div class="wrapp">
@@ -77,7 +82,7 @@ const appendMessage = () => {
     </div>
     <!-- <Test/> -->
     <!-- <div v-for="item in arr">{{ item }}</div> -->
-    <free-im ref="freeIM" @pullMessages="pullMessages" @send="send" :user-info="userInfo">
+    <free-im ref="freeIM" @pullMessages="pullMessages" @send="send" :user-info="userInfo" :message-name="showMessageName">
     
       <template v-if="msgFixedTop" #messages-fixed-top>
         <div style="background-color: #FFF;">
@@ -97,6 +102,7 @@ const appendMessage = () => {
   <div>
     <free-button @click="appendMessage">发送一条消息</free-button>
     <free-button @click="toggleMessageTop">消息列表头部插槽</free-button>
+    <free-button @click="toggleMessageName">显示隐藏聊天窗口内名字</free-button>
   </div>
 </template>
 <style scoped>

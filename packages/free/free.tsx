@@ -1,6 +1,6 @@
 import { defineComponent, ExtractPropTypes, reactive, ref, nextTick, computed } from "vue";
 import { useMenus } from '../hooks'
-import { isFunction, makeObjectProp, guid, isArray } from '../utils'
+import { isFunction, makeObjectProp, guid, isArray, makeBooleanProp } from '../utils'
 import { MenuType } from "../utils/types";
 import { useExpose } from "../hooks/use-expose";
 import { Contact } from '../contact/types'
@@ -18,7 +18,8 @@ import {
 const freeProps = {
     width: makeNumericProp(860),
     height: makeNumericProp(580),
-    userInfo: makeObjectProp<User>()
+    userInfo: makeObjectProp<User>(),
+    messageName: makeBooleanProp(false)
 }
 
 export type FProps = ExtractPropTypes<typeof freeProps>
@@ -387,7 +388,7 @@ export default defineComponent({
                                 <i class="free-icon-more"></i>
                             </div>
                             <div class="free-contact-messages_body">
-                                <free-messages ref={ msgRef } onLoad={ pullMessages } data={ messagesBucket.get(currentContact.value.id) } is-end={ currentLoadend.value } loading={ currentLoading.value } />
+                                <free-messages ref={ msgRef } onLoad={ pullMessages } messageName={ props.messageName } data={ messagesBucket.get(currentContact.value.id) } is-end={ currentLoadend.value } loading={ currentLoading.value } />
                                 <free-editor onSend={ handleSend } />
                             </div>
                         </div>

@@ -1,8 +1,9 @@
 import { defineComponent } from "vue";
-import { makeStringProp } from '../utils'
+import { makeNumberProp, makeStringProp } from '../utils'
 
 const avatarProps = {
-    avatar: makeStringProp('头像')
+    avatar: makeStringProp('头像'),
+    size: makeNumberProp(40),
 }
 
 export default defineComponent({
@@ -11,7 +12,7 @@ export default defineComponent({
     setup(props) {
         return () => {
             return (
-                <div class="free-avatar">
+                <div class="free-avatar" style={`width: ${props.size}px;height: ${props.size}px;line-height: ${props.size}px;`}>
                     { props.avatar ? props.avatar.substr(-2) : props.avatar }
                 </div>
             )
