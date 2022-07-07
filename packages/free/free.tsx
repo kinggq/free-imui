@@ -42,13 +42,17 @@ export default defineComponent({
         const contacts = ref<Contact[]>([])
         const groups = ref<Contact[]>([])
         const curContact = ref<Contact>()
-        const currentContact = ref<Contact>()
+        const currentContactId = ref<string | number>()
         const messagesBucket = reactive(new Map<string | number, Message[]>())
         const messageLoadedBucket = reactive(new Map())
         const loadingBucket = reactive(new Map())
         const lockBucket = reactive(new Map())
         const menus = useMenus()
         const msgRef = ref<MessageInstance | null>(null)
+
+        const currentContact = computed(() => {
+            return contacts.value.find(contact => contact.id === currentContactId.value)
+        })
 
         const lastMessages = computed(() => {
             const data = contacts.value.filter(contact => contact.lastMessage)
@@ -71,7 +75,7 @@ export default defineComponent({
             const bottom: HTMLElement | JSX.Element[] = []
             menus.value.forEach(menu => {
                 const node = <div class={`free-menu-item ${activeMenu.value === menu.key ? 'free-menu-active' : ''}`} title={menu.title} onClick={() => {
-                    isFunction(menu.click) ? menu.click : changeMenu(menu)
+                    isFunction(menu.click) ? menu.click : changeMenuClick(menu)
                 }}>
                     {
                         menu.key === 'messages' ?
@@ -84,9 +88,9 @@ export default defineComponent({
                 !menu.bottom ? top.push(node) : bottom.push(node)
             })
 
-            function changeMenu(menu: MenuType) {
+            function changeMenuClick(menu: MenuType) {
                 if (menu.bottom) return
-                activeMenu.value = menu.key
+                changeMenu(menu.key)
             }
 
             return {
@@ -137,10 +141,37 @@ export default defineComponent({
             sortContacts()
         }
 
+        function changeMenu(menuName: string) {
+            emit('change-menu', menuName)
+            activeMenu.value = menuName
+        }
+
+        function changeContact(contactId: string | number, menuName?: string) {
+            if (menuName) {
+                changeMenu(menuName)
+            } else {
+                if (contactId === currentContactId.value) return
+            }
+
+            currentContactId.value = contactId
+            emit('change-contact', currentContact.value)
+
+            if(!messagesBucket.has(contactId)) {
+                pullMessages(() => {
+                    if (msgRef.value){
+                        
+                        msgRef.value.scrollToBottom()
+                    }
+                })
+            } else {
+                loadingBucket.set(contactId, false)
+            }
+        }
+
         function renderMessages() {
             const click = (contact: Contact) => {
                 updateUnread(contact)
-                currentContact.value = contact
+                currentContactId.value = contact.id
                 if(!messagesBucket.has(contact.id)) {
                     pullMessages(() => {
                         if (msgRef.value){
@@ -156,7 +187,7 @@ export default defineComponent({
 
             return lastMessages.value.map(contact => {
                 return (
-                    <free-contact {...activeClass(contact.id, currentContact.value?.id)} onClick={() => {click(contact)}} contact={contact} is-message />
+                    <free-contact {...activeClass(contact.id, currentContactId.value)} onClick={() => {click(contact)}} contact={contact} is-message />
                 )
             })
         }
@@ -211,7 +242,7 @@ export default defineComponent({
             const contactNode = contacts.value.map(contact => {
                 const node = [
                     contact.sort !== curIndex ? <div class="free-index">{contact.sort}</div> : '',
-                    <free-contact {...activeClass(contact.id, curContact.value?.id)} onClick={click} contact={contact} />
+                    <free-contact {...activeClass(contact.id, curContact.value?.id)} onClick={click} contact={contact} base />
                 ]
                 curIndex = contact.sort
                 return node
@@ -219,7 +250,7 @@ export default defineComponent({
             return [
                 <div class="free-contact-category-label">群聊</div>,
                 groups.value.map(group => {
-                    return <free-contact {...activeClass(group.id)} onClick={click} contact={group} />
+                    return <free-contact {...activeClass(group.id)} onClick={click} contact={group} base />
                 }),
                 <div class="free-contact-category-label">联系人</div>,
                 contactNode
@@ -236,13 +267,13 @@ export default defineComponent({
         }
 
         const currentLoadend = computed(() => {
-            return messageLoadedBucket.has(currentContact.value?.id) ? 
-            messageLoadedBucket.get(currentContact.value?.id) : false
+            return messageLoadedBucket.has(currentContactId.value) ? 
+            messageLoadedBucket.get(currentContactId.value) : false
         })
 
         const currentLoading = computed(() => {
-            if (loadingBucket.has(currentContact.value?.id)) {
-                return loadingBucket.get(currentContact.value?.id)
+            if (loadingBucket.has(currentContactId.value)) {
+                return loadingBucket.get(currentContactId.value)
             }
             return true
         })
@@ -280,27 +311,11 @@ export default defineComponent({
             delete data.id
             const index = findContactById(id)
             if (index !== -1) {
-                data.unread = data.unread + contacts.value[index].unread
+                if (data.unread) {
+                    data.unread = data.unread + contacts.value[index].unread
+                }
                 contacts.value[index] = { ...contacts.value[index], ...data }
             }
-            
-            // let index: number
-            // if (message.toContactId === props.userInfo.id) {
-            //     index = findContactById(message.from.id)
-            // } else {
-            //     index = findContactById(message.toContactId)
-            // }
-            
-            // console.log(contacts.value[index])
-            // if (index > -1) {
-            //     contacts.value[index].lastMessage = message.content
-            //     contacts.value[index].lastMessageTime = message.time
-            //     contacts.value[index].lastMessageStatus = message.status
-
-            //     if (unread){
-            //         contacts.value[index].unread += unread
-            //     }
-            // }
         }
 
         function findContactById(id: string | number) {
@@ -329,7 +344,7 @@ export default defineComponent({
                     lastMessageStatus: message.status,
                     unread: 0
                 }
-                if (message.toContactId === currentContact.value?.id) {
+                if (message.toContactId === currentContactId.value) {
                     msgRef.value?.scrollToBottom()
                 } else {
                     updateContactData.unread = 1
@@ -355,12 +370,22 @@ export default defineComponent({
                 type: 'text',
                 status: 'uploading',
                 content: text,
-                toContactId: currentContact.value?.id!,
+                toContactId: currentContactId.value!,
                 from: props.userInfo
             }
         }
 
         function renderContent() {
+            const click = () => {
+                if (!curContact.value?.lastMessage) {
+                    updateContact({
+                        id: curContact.value?.id,
+                        lastMessage: ' '
+                    })
+                }
+                changeContact(curContact.value?.id!, 'messages')
+            }
+
             const detailNode = () => {
                 if (activeMenu.value === 'contacts' && curContact.value) {
                     if (slots['contact-detail']) {
@@ -376,7 +401,7 @@ export default defineComponent({
 
                             </div>
                             <div class="free-contact-detail_footer">
-                                <free-button type="primary">发送</free-button>
+                                <free-button type="primary" onClick={ click }>发送</free-button>
                             </div>
                         </div>
                     )

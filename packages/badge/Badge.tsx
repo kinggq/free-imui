@@ -13,7 +13,7 @@ export default defineComponent({
             return (
                 <div class="free-badge">
                     { slots.default && slots.default() }
-                    <div class="free-badge-dot" v-show={ props.unread !== 0 }>
+                    <div class="free-badge-dot" v-show={ props.unread !== 0 && props.unread !== undefined }>
                         { props.unread > 99 ? '99+' : props.unread }
                     </div>
                 </div>
