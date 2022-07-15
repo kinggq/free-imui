@@ -1,5 +1,7 @@
 import { defineComponent, ref } from "vue";
-
+const command = (command: string, val?: any) => {
+    document.execCommand(command, false, val);
+  }
 export default defineComponent({
     name: 'free-editor',
     emits: ['send'],
@@ -7,15 +9,19 @@ export default defineComponent({
         const textarea = ref<HTMLElement>()
 
         const onKeydown = (event: KeyboardEvent) => {
+            if (event.code === 'Enter' && !event.ctrlKey && !event.shiftKey) {
+                event.preventDefault()
+                command("insertLineBreak")
+            }
             if (event.code === 'Enter') {
                 
-                // event.preventDefault()
                 
                 if (event.ctrlKey) {
                     handleSend()
                 }
                 
             }
+            
         }
 
         function handleSend() {
@@ -31,7 +37,14 @@ export default defineComponent({
         return () => {
             return (
                 <div class="free-editor">
-                    <div class="free-editor-tool"></div>
+                    <div class="free-editor-tool">
+                        <div class="free-editor-tool__item">
+                            <i class="free-icon-emoji"></i>
+                        </div>
+                        <div class="free-editor-tool__item">
+                            <i class="free-icon-file"></i>
+                        </div>
+                    </div>
                     <div class="free-editor-content">
                         <div
                             ref={ textarea }

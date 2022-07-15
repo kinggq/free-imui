@@ -3,7 +3,24 @@
     flex-direction: column;
     
     &-tool {
+        display: flex;
         height: 40px;
+        &__item {
+            font-size: 20px;
+            color: #808080;
+            padding: 5px 10px;
+            font-family: 'iconfont';
+            .free-icon-emoji {
+                &:before {
+                    content: "\e75a";
+                }
+            }
+            .free-icon-file {
+                &:before {
+                    content: "\ec17";
+                }
+            }
+        }
     }
     &-content {
         flex: 1;

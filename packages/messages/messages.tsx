@@ -60,12 +60,12 @@ export default defineComponent({
             function innerMessages() {
                 return props.data.map((msg, index) => {
                     return (
-                        <div class={`free-message-content free-message-${ userInfo.id === msg.from.id ? 'right' : 'left'}`} style="height: 100px;" key={ msg.id }>
+                        <div class={`free-message-content free-message-${ userInfo.id === msg.from.id ? 'right' : 'left'}`} key={ msg.id }>
                             <free-avatar avatar={ msg.from.avatar } size={ 36 } />
                             <div class="free-message-info">
                                 <div class="free-message-username" v-show={ props.messageName }>{ msg.from.nickname }</div>
                                 <div class="free-message-content__wrap">
-                                    <div class="free-message-content__text">{ msg.content }</div>
+                                    <div class="free-message-content__text" v-html={ msg.content }></div>
                                     <div style="padding-left: 10px;"></div>
                                     <div class="free-message-content__status">
                                         <i class="free-icon-loading" v-show={ msg.status === 'uploading' }></i>
@@ -79,7 +79,7 @@ export default defineComponent({
                 })
             }
             return (
-                <div ref={ root } class="free-messages" onScroll={ onScroll }>
+                <div ref={ root } class="free-message" onScroll={ onScroll }>
                     <div class={`free-messages-loading`}>
                         <i class="free-icon-loading" v-show={loadStatus.value}></i>
                         <div class="free-messages-load_text" v-show={ props.isEnd }>暂无更多消息</div>
