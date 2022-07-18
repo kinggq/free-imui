@@ -34,15 +34,25 @@ export default defineComponent({
             textarea.value!.innerHTML = ''
         }
 
+        const fileRef = ref<HTMLInputElement>()
+        const changeFile = () => {
+            console.log(fileRef.value?.files)
+        }
+
+        const handleClickFile = () => {
+            fileRef.value?.click()
+        }
+
         return () => {
             return (
                 <div class="free-editor">
+                    <input type="file" ref={ fileRef } style="display: none;" onChange={ changeFile } />
                     <div class="free-editor-tool">
                         <div class="free-editor-tool__item">
                             <i class="free-icon-emoji"></i>
                         </div>
                         <div class="free-editor-tool__item">
-                            <i class="free-icon-file"></i>
+                            <i class="free-icon-file" onClick={ handleClickFile }></i>
                         </div>
                     </div>
                     <div class="free-editor-content">
