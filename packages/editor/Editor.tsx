@@ -43,12 +43,19 @@ export default defineComponent({
             fileRef.value?.click()
         }
 
+        const show = ref(false)
+
+        const emojiClick = () => {
+            show.value = true
+        }
+
         return () => {
             return (
                 <div class="free-editor">
+                    <free-dialog show={show.value}></free-dialog>
                     <input type="file" ref={ fileRef } style="display: none;" onChange={ changeFile } />
                     <div class="free-editor-tool">
-                        <div class="free-editor-tool__item">
+                        <div class="free-editor-tool__item" onClick={ emojiClick }>
                             <i class="free-icon-emoji"></i>
                         </div>
                         <div class="free-editor-tool__item">

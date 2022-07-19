@@ -4,6 +4,7 @@ import FreeAvatar from './avatar'
 import FreeButton from './button'
 import { FreeContact, Contact } from './contact'
 import { FreeBadge } from './badge'
+import { FreeDialog } from './dialog'
 
 import {
     FreeMessages,
@@ -16,7 +17,7 @@ import {
 import { FreeEditor } from './editor'
 import './styles'
 
-const components = [FreeIM, FreeAvatar, FreeContact, FreeButton, FreeMessages, FreeEditor, FreeBadge]
+const components = [FreeIM, FreeAvatar, FreeContact, FreeButton, FreeMessages, FreeEditor, FreeBadge, FreeDialog]
 
 const install = (app: App) => {
     components.map(component => app.component(component.name, component))
@@ -28,7 +29,8 @@ export {
     FreeButton,
     FreeContact,
     FreeMessages,
-    FreeEditor
+    FreeEditor,
+    FreeDialog
 }
 
 export type {

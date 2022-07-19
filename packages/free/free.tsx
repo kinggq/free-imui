@@ -29,7 +29,8 @@ export default defineComponent({
     props: freeProps,
     provide() {
         return {
-            userInfo: this.userInfo
+            userInfo: this.userInfo,
+            freeIM: this
         }
     },
     setup(props, { slots, emit }) {
@@ -439,6 +440,7 @@ export default defineComponent({
         return () => {
             return (
                 <div class={`free-wrapper free-theme-default`} style={wrapper_style}>
+                    
                     {renderMenu()}
                     {renderSidebar()}
                     {renderContent()}
