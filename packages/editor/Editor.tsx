@@ -52,7 +52,11 @@ export default defineComponent({
         return () => {
             return (
                 <div class="free-editor">
-                    <free-dialog show={show.value}></free-dialog>
+                    <free-dialog v-model={[show.value, 'show']}>
+                        <p>Some contents...</p>
+                        <p>Some contents...</p>
+                        <p>Some contents...</p>
+                    </free-dialog>
                     <input type="file" ref={ fileRef } style="display: none;" onChange={ changeFile } />
                     <div class="free-editor-tool">
                         <div class="free-editor-tool__item" onClick={ emojiClick }>
