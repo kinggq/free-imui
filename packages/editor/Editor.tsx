@@ -52,7 +52,7 @@ export default defineComponent({
         return () => {
             return (
                 <div class="free-editor">
-                    <free-dialog v-model={[show.value, 'show']}>
+                    <free-dialog v-model={[show.value, 'show']} width={260}>
                         <p>Some contents...</p>
                         <p>Some contents...</p>
                         <p>Some contents...</p>
