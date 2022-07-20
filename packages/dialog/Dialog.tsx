@@ -45,8 +45,8 @@ export default defineComponent({
                         </div>
 
                         <div class="free-dialog-footer" v-show={ props.footer }>
-                            <free-button onClick={ updateShow }>{ props.cancelText }</free-button>
-                            <free-button style="margin-left: 10px;">{ props.okText }</free-button>
+                            <free-button size="mini" onClick={ updateShow }>{ props.cancelText }</free-button>
+                            <free-button type="primary" size="mini" style="margin-left: 10px;">{ props.okText }</free-button>
                         </div>
                     </div>
                 </div>
