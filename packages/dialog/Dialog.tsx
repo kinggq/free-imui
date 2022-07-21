@@ -17,7 +17,7 @@ const DialogProps = {
 export default defineComponent({
     name: 'free-dialog',
     props: DialogProps,
-    emits: ['update:show'],
+    emits: ['update:show', 'ok'],
     setup(props, { emit, slots }) {
         const { width, height } = inject<any>('freeIM')
         
@@ -28,6 +28,10 @@ export default defineComponent({
         const maskUpdateShow = () => {
             if (!props.maskClosable) return
             emit('update:show', false)
+        }
+
+        const ok = (e: Event) => {
+            emit('ok', e)
         }
 
         return () => {
@@ -46,7 +50,7 @@ export default defineComponent({
 
                         <div class="free-dialog-footer" v-show={ props.footer }>
                             <free-button size="mini" onClick={ updateShow }>{ props.cancelText }</free-button>
-                            <free-button type="primary" size="mini" style="margin-left: 10px;">{ props.okText }</free-button>
+                            <free-button type="primary" size="mini" style="margin-left: 10px;" onClick={ ok }>{ props.okText }</free-button>
                         </div>
                     </div>
                 </div>
