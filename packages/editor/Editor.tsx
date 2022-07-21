@@ -1,11 +1,20 @@
 import { defineComponent, ref } from "vue";
+import { makeObjectProp } from '../utils'
+import { Contact } from '../index'
+
 const command = (command: string, val?: any) => {
     document.execCommand(command, false, val);
-  }
+}
+
+const editorProps = {
+    contact: makeObjectProp<Contact>(),
+}
+
 export default defineComponent({
     name: 'free-editor',
+    props: editorProps,
     emits: ['send'],
-    setup(_, { emit }) {
+    setup(props, { emit }) {
         const textarea = ref<HTMLElement>()
 
         const onKeydown = (event: KeyboardEvent) => {
@@ -35,8 +44,11 @@ export default defineComponent({
         }
 
         const fileRef = ref<HTMLInputElement>()
+        const files = ref<FileList | null>()
         const changeFile = () => {
+            files.value = fileRef.value?.files
             console.log(fileRef.value?.files)
+            show.value = true
         }
 
         const handleClickFile = () => {
@@ -49,15 +61,44 @@ export default defineComponent({
             show.value = true
         }
 
+        const ok = () => {
+            show.value = false
+            files.value = null
+        }
+
         return () => {
             return (
                 <div class="free-editor">
-                    <free-dialog v-model={[show.value, 'show']} width={260}>
-                        <p>Some contents...</p>
-                        <p>Some contents...</p>
-                        <p>Some contents...</p>
+                    <free-dialog v-model={[show.value, 'show']} width={260} header={false} onOk={ ok }>
+                        <div class="free-editor-files">
+                            <div class="free-editor-files__title">发送给：</div>
+                            <div class="free-editor-files__info">
+                                <free-avatar avatar={ props.contact.avatar }></free-avatar>
+                                <div class="free-editor-files__nickname">{ props.contact.nickname }</div>
+                            </div>
+                            <div class="free-editor-files__content">
+                                <div class="free-editor-files__list">
+                                    {
+                                        files.value ? Array.from(files.value).map(file => {
+                                            return (
+                                                <div class="free-editor-files__item">
+                                                    <img src="" alt="" />
+                                                    <div>
+                                                        <div class="free-editor-filename">{ file.name }</div>
+                                                        <div class="free-editor-filesize">{ file.size }</div>
+                                                    </div>
+                                                </div>
+                                            )
+                                        }) : []
+                                    }
+                                </div>
+                                <div class="free-editor-files__footer">
+                                    <input class="free-editor-files__input" type="text" placeholder="给朋友留言" />
+                                </div>
+                            </div>
+                        </div>
                     </free-dialog>
-                    <input type="file" ref={ fileRef } style="display: none;" onChange={ changeFile } />
+                    <input type="file" ref={ fileRef } multiple style="display: none;" onChange={ changeFile } />
                     <div class="free-editor-tool">
                         <div class="free-editor-tool__item" onClick={ emojiClick }>
                             <i class="free-icon-emoji"></i>

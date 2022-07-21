@@ -415,7 +415,7 @@ export default defineComponent({
                             </div>
                             <div class="free-contact-messages_body">
                                 <free-messages ref={ msgRef } onLoad={ pullMessages } messageName={ props.messageName } data={ messagesBucket.get(currentContact.value.id) } is-end={ currentLoadend.value } loading={ currentLoading.value } />
-                                <free-editor onSend={ handleSend } />
+                                <free-editor contact={ currentContact.value } onSend={ handleSend } />
                             </div>
                         </div>
                     )
