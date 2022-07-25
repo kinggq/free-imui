@@ -1,5 +1,5 @@
 import { defineComponent, ref } from "vue";
-import { makeObjectProp } from '../utils'
+import { makeObjectProp, formatByte } from '../utils'
 import { Contact } from '../index'
 
 const command = (command: string, val?: any) => {
@@ -82,10 +82,10 @@ export default defineComponent({
                                         files.value ? Array.from(files.value).map(file => {
                                             return (
                                                 <div class="free-editor-files__item">
-                                                    <img src="" alt="" />
-                                                    <div>
+                                                    <i class="free-icon-files"></i>
+                                                    <div class="free-editor-files__right">
                                                         <div class="free-editor-filename">{ file.name }</div>
-                                                        <div class="free-editor-filesize">{ file.size }</div>
+                                                        <div class="free-editor-filesize">{ formatByte(file.size) }</div>
                                                     </div>
                                                 </div>
                                             )

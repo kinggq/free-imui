@@ -65,9 +65,28 @@
     &-files__list {
         flex: 1;
     }
+    &-files__item {
+        display: flex;
+        padding: 5px 0;
+        .free-icon-files {
+            font-family: 'iconfont';
+            color: inherit;
+            font-size: 36px;
+            &:before {
+                content: "\e6f1";
+            }
+        }
+    }
+    &-files__right {
+        margin-left: 5px;
+    }
     &-files__input {
         width: 100%;
         border: none;
         padding: 5px 2px;
+    }
+    &-filesize {
+        color: #999;
+        font-size: 12px;
     }
 }

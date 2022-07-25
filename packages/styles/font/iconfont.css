@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3461652 */
-  src: url('iconfont.woff2?t=1658133803612') format('woff2'),
-       url('iconfont.woff?t=1658133803612') format('woff'),
-       url('iconfont.ttf?t=1658133803612') format('truetype');
+  src: url('iconfont.woff2?t=1658460262802') format('woff2'),
+       url('iconfont.woff?t=1658460262802') format('woff'),
+       url('iconfont.ttf?t=1658460262802') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,86 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-PPT:before {
+  content: "\e6e2";
+}
+
+.icon-AI:before {
+  content: "\e6e3";
+}
+
+.icon-HTML:before {
+  content: "\e6e4";
+}
+
+.icon-word:before {
+  content: "\e6e5";
+}
+
+.icon-yasuo:before {
+  content: "\e6e6";
+}
+
+.icon-txt:before {
+  content: "\e6e7";
+}
+
+.icon-excel:before {
+  content: "\e6e9";
+}
+
+.icon-PSD:before {
+  content: "\e6ea";
+}
+
+.icon-lianjie:before {
+  content: "\e6eb";
+}
+
+.icon-GIF:before {
+  content: "\e6ec";
+}
+
+.icon-PDF:before {
+  content: "\e6ed";
+}
+
+.icon-yinpin:before {
+  content: "\e6ee";
+}
+
+.icon-weizhiwenjian:before {
+  content: "\e6ef";
+}
+
+.icon-SVG:before {
+  content: "\e6f0";
+}
+
+.icon-JPG:before {
+  content: "\e6f1";
+}
+
+.icon-shipin:before {
+  content: "\e6f2";
+}
+
+.icon-huishouzhan:before {
+  content: "\e6f3";
+}
+
+.icon-yidongwenjian:before {
+  content: "\e6f4";
+}
+
+.icon-wenjianjia1:before {
+  content: "\e6f5";
+}
+
+.icon-mingming:before {
+  content: "\e6f6";
 }
 
 .icon-close-bold:before {

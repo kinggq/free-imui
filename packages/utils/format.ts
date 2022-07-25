@@ -13,3 +13,15 @@ export const guid = () => {
         return v.toString(16);
     });
 }
+
+export function formatByte(value: number) {
+    if (!value) {
+      return '0 Bytes'
+    }
+    const unitArr = ['B', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']
+    let index = 0;
+    index = Math.floor(Math.log(value) / Math.log(1024))
+    let size = value / Math.pow(1024, index)
+    size = parseFloat(size.toFixed(2))
+    return size + unitArr[index]
+}
