@@ -17,12 +17,13 @@ const DialogProps = {
 export default defineComponent({
     name: 'free-dialog',
     props: DialogProps,
-    emits: ['update:show', 'ok'],
+    emits: ['update:show', 'ok', 'cancel'],
     setup(props, { emit, slots }) {
         const { width, height } = inject<any>('freeIM')
         
         const updateShow = () => {
             emit('update:show', false)
+            emit('cancel')
         }
         
         const maskUpdateShow = () => {
