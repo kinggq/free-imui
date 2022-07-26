@@ -44,11 +44,19 @@ export default defineComponent({
         }
 
         const fileRef = ref<HTMLInputElement>()
-        const files = ref<FileList | null>()
-        const changeFile = () => {
-            files.value = fileRef.value?.files
-            console.log(fileRef.value?.files)
+        const fileList = ref<FileList | null>()
+        const changeFile = (event: Event) => {
+            const { files } = event.target as HTMLInputElement
+            if (!files || !files.length) return
+            fileList.value = files
+            console.log(files)
             show.value = true
+        }
+
+        const resetInput = () => {
+            if (fileRef.value) {
+                fileRef.value.value = '';
+            }
         }
 
         const handleClickFile = () => {
@@ -63,13 +71,17 @@ export default defineComponent({
 
         const ok = () => {
             show.value = false
-            files.value = null
+            resetInput()
+        }
+
+        const cancel = () => {
+            resetInput()
         }
 
         return () => {
             return (
                 <div class="free-editor">
-                    <free-dialog v-model={[show.value, 'show']} width={260} header={false} onOk={ ok }>
+                    <free-dialog v-model={[show.value, 'show']} width={260} header={false} onOk={ ok } onCancel={ cancel }>
                         <div class="free-editor-files">
                             <div class="free-editor-files__title">发送给：</div>
                             <div class="free-editor-files__info">
@@ -79,7 +91,7 @@ export default defineComponent({
                             <div class="free-editor-files__content">
                                 <div class="free-editor-files__list">
                                     {
-                                        files.value ? Array.from(files.value).map(file => {
+                                        fileList.value ? Array.from(fileList.value).map(file => {
                                             return (
                                                 <div class="free-editor-files__item">
                                                     <i class="free-icon-files"></i>
