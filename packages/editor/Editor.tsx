@@ -13,10 +13,11 @@ const editorProps = {
 export default defineComponent({
     name: 'free-editor',
     props: editorProps,
-    emits: ['send'],
+    emits: ['send', 'upload'],
     setup(props, { emit }) {
         const textarea = ref<HTMLElement>()
-
+        // 上传文件留言
+        const value = ref('')
         const onKeydown = (event: KeyboardEvent) => {
             if (event.code === 'Enter' && !event.ctrlKey && !event.shiftKey) {
                 event.preventDefault()
@@ -70,6 +71,14 @@ export default defineComponent({
         }
 
         const ok = () => {
+            if (!fileList.value || !fileList.value.length) return
+            Array.from(fileList.value).forEach(file => {
+                emit('upload', file)
+            })
+            if (value.value) {
+                emit('send', value.value)
+            }
+            
             show.value = false
             resetInput()
         }
@@ -105,7 +114,7 @@ export default defineComponent({
                                     }
                                 </div>
                                 <div class="free-editor-files__footer">
-                                    <input class="free-editor-files__input" type="text" placeholder="给朋友留言" />
+                                    <input v-model={ value } class="free-editor-files__input" type="text" placeholder="给朋友留言" />
                                 </div>
                             </div>
                         </div>
