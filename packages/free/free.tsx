@@ -281,10 +281,10 @@ export default defineComponent({
 
         const handleSend = (content: string) => {
             console.log(content)
-            const message = createMessage(content)
+            const message = createMessage({ content })
             appendMessage(message)
-            emit('send', currentContact.value, message, (message: Message, contact: Contact, status: MessageStatus = 'success') => {
-                updateMessage(message, contact, status)
+            if (!currentContact.value) return
+            _emitSend(currentContact.value, message, (contact) => {
                 updateContact({
                     id: contact.id,
                     lastMessageTime: message.time,
@@ -293,6 +293,18 @@ export default defineComponent({
                     unread: 0
                 })
             })
+        }
+
+        function _emitSend(
+            contact: Contact,
+            message: Message,
+            next: (contact: Contact) => void,
+            file?: File
+        ){
+            emit('send', contact, message, (message: Message, contact: Contact, status: MessageStatus = 'success') => {
+                next(contact)
+                updateMessage(Object.assign(message, status), contact, status)
+            }, file)
         }
         
         function updateMessage(message: Message, contact: Contact, status: MessageStatus) {
@@ -364,16 +376,42 @@ export default defineComponent({
             messagesBucket.get(contactId)![type](...message)
         }
 
-        function createMessage(text: string): Message {
+        function createMessage(message: any): Message {
             return {
-                id: guid(),
-                time: new Date().getTime(),
-                type: 'text',
-                status: 'uploading',
-                content: text,
-                toContactId: currentContactId.value!,
-                from: props.userInfo
+                ...{
+                    id: guid(),
+                    time: new Date().getTime(),
+                    type: 'text',
+                    status: 'uploading',
+                    toContactId: currentContactId.value!,
+                    from: props.userInfo
+                },
+                ...message
             }
+        }
+
+        const handleUpload = (file: File) => {
+            const imageTypes = ['image/png', 'image/jpeg', 'image/gif']
+            let image
+            if (imageTypes.includes(file.type)) {
+                image = {
+                    content: URL.createObjectURL(file),
+                    type: 'image'
+                }
+            } else {
+                image = {
+                    type: 'file',
+                    fileSize: file.size,
+                    fileName: file.name,
+                    content: ''
+                }
+            }
+            const message = createMessage(image)
+            appendMessage(message)
+            if (!currentContact.value) return
+            _emitSend(currentContact.value, message, (contact) => {
+                
+            }, file)
         }
 
         function renderContent() {
@@ -415,7 +453,7 @@ export default defineComponent({
                             </div>
                             <div class="free-contact-messages_body">
                                 <free-messages ref={ msgRef } onLoad={ pullMessages } messageName={ props.messageName } data={ messagesBucket.get(currentContact.value.id) } is-end={ currentLoadend.value } loading={ currentLoading.value } />
-                                <free-editor contact={ currentContact.value } onSend={ handleSend } />
+                                <free-editor contact={ currentContact.value } onSend={ handleSend } onUpload={ handleUpload }/>
                             </div>
                         </div>
                     )
