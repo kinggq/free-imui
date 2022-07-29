@@ -59,25 +59,10 @@ export default defineComponent({
         return () => {
             function innerMessages() {
                 return props.data.map((msg, index) => {
-                    return (
-                        <div class={`free-message-content free-message-${ userInfo.id === msg.from.id ? 'right' : 'left'}`} key={ msg.id }>
-                            <free-avatar avatar={ msg.from.avatar } size={ 36 } />
-                            <div class="free-message-info">
-                                <div class="free-message-username" v-show={ props.messageName }>{ msg.from.nickname }</div>
-                                <div class="free-message-content__wrap">
-                                    <div class="free-message-content__text" v-html={ msg.content }></div>
-                                    <div style="padding-left: 10px;"></div>
-                                    <div class="free-message-content__status">
-                                        <i class="free-icon-loading" v-show={ msg.status === 'uploading' }></i>
-                                        <i class="free-icon-error" v-show={ msg.status === 'error' }></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )
                     
                 })
             }
+            console.log(props.data)
             return (
                 <div ref={ root } class="free-message" onScroll={ onScroll }>
                     <div class={`free-messages-loading`}>
@@ -85,7 +70,23 @@ export default defineComponent({
                         <div class="free-messages-load_text" v-show={ props.isEnd }>暂无更多消息</div>
                     </div>
                     {
-                        innerMessages()
+                        
+                        props.data.map((message, index) => {
+                            const tagName = `free-message-${message.type}`
+                            console.log('tagName', tagName)
+                            let attrs = {
+                                message,
+                                reverse: userInfo.id === message.from.id,
+                                messageName: props.messageName,
+                            }
+                            return (
+                                message.type === 'image' ?
+                                <free-message-image { ...attrs } />
+                                : message.type === 'file' ?
+                                <free-message-file { ...attrs } />
+                                : <free-message-text { ...attrs } />
+                            )
+                        })
                     }
                 </div>
             )

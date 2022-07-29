@@ -11,13 +11,18 @@ import {
     MessageInstance,
     Message,
     MessageStatus,
-    MessageType
+    MessageType,
+    FreeMessageImage,
+    FreeMessageTemplate,
+    FreeMessageFile,
+    FreeMessageText
 } from './messages'
 
 import { FreeEditor } from './editor'
 import './styles'
 
-const components = [FreeIM, FreeAvatar, FreeContact, FreeButton, FreeMessages, FreeEditor, FreeBadge, FreeDialog]
+const components = [FreeIM, FreeAvatar, FreeContact, FreeButton, FreeMessages, FreeEditor, FreeBadge, FreeDialog, FreeMessageImage, FreeMessageTemplate, FreeMessageFile,
+    FreeMessageText]
 
 const install = (app: App) => {
     components.map(component => app.component(component.name, component))
@@ -30,7 +35,11 @@ export {
     FreeContact,
     FreeMessages,
     FreeEditor,
-    FreeDialog
+    FreeDialog,
+    FreeMessageImage,
+    FreeMessageTemplate,
+    FreeMessageFile,
+    FreeMessageText
 }
 
 export type {

@@ -7,12 +7,14 @@ export type MessageStatus = 'success' | 'error' | 'uploading'
 export type MessageType = 'text' | 'image' | 'file'
 
 export type Message = {
-    id: string | number,
-    time: number,
-    type: MessageType,
-    status: MessageStatus,
-    content: string,
-    toContactId: string | number,
+    id: string | number
+    time: number
+    type: MessageType
+    status: MessageStatus
+    content: string
+    toContactId: string | number
+    fileName?: string
+    fileSize?: number
     from: User
 }
 

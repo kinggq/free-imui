@@ -303,7 +303,7 @@ export default defineComponent({
         ){
             emit('send', contact, message, (message: Message, contact: Contact, status: MessageStatus = 'success') => {
                 next(contact)
-                updateMessage(Object.assign(message, status), contact, status)
+                updateMessage(message, contact, status)
             }, file)
         }
         
@@ -410,7 +410,7 @@ export default defineComponent({
             appendMessage(message)
             if (!currentContact.value) return
             _emitSend(currentContact.value, message, (contact) => {
-                
+
             }, file)
         }
 
