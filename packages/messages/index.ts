@@ -4,6 +4,7 @@ import _MessageImage from './Image'
 import _MessageFile from './File'
 import _MessageText from './Text'
 import _MessageTemplate from './Template'
+import './index.less'
 
 export const FreeMessages = withInstall(_Messages)
 export const FreeMessageImage = withInstall(_MessageImage)
