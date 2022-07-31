@@ -279,6 +279,15 @@ export default defineComponent({
             return true
         })
 
+        const lastMessageRender = (message: Message) => {
+            if (message.type === 'file') {
+                return '[文件]'
+            } else if (message.type === 'image') {
+                return '[图片]'
+            }
+            return message.content
+        }
+
         const handleSend = (content: string) => {
             console.log(content)
             const message = createMessage({ content })
@@ -288,7 +297,7 @@ export default defineComponent({
                 updateContact({
                     id: contact.id,
                     lastMessageTime: message.time,
-                    lastMessage: message.content,
+                    lastMessage: lastMessageRender(message),
                     lastMessageStatus: message.status,
                     unread: 0
                 })
@@ -345,7 +354,7 @@ export default defineComponent({
                     id: message.toContactId,
                     unread: 1,
                     lastMessageTime: message.time,
-                    lastMessage: message.content
+                    lastMessage: lastMessageRender(message)
                 })
                 
             } else {
@@ -353,7 +362,7 @@ export default defineComponent({
                 const updateContactData = {
                     id: message.toContactId,
                     lastMessageTime: message.time,
-                    lastMessage: message.content,
+                    lastMessage: lastMessageRender(message),
                     lastMessageStatus: message.status,
                     unread: 0
                 }
