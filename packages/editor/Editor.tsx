@@ -114,7 +114,7 @@ export default defineComponent({
                                     }
                                 </div>
                                 <div class="free-editor-files__footer">
-                                    <input v-model={ value } class="free-editor-files__input" type="text" placeholder="给朋友留言" />
+                                    <input v-model={ value.value } class="free-editor-files__input" type="text" placeholder="给朋友留言" />
                                 </div>
                             </div>
                         </div>
