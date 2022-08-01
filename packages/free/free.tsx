@@ -213,7 +213,7 @@ export default defineComponent({
             
             lockBucket.set(contact.id, true)
 
-            emit('pull-messages', contact, async (messages: Message[], end: any) => {
+            emit('pull-messages', contact, async (messages: Message[], end?: boolean) => {
                 
                 if(messages.length === 0) {
                     

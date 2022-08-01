@@ -28,6 +28,9 @@ const install = (app: App) => {
     components.map(component => app.component(component.name, component))
 }
 
+export type PullMessageNext = (message: Message[], end?: boolean) => void
+export type SendNext = (message: Message, contact: Contact, status: MessageStatus) => void
+
 export {
     FreeIM,
     FreeAvatar,
