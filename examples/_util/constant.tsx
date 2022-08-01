@@ -1,4 +1,4 @@
-import { Contact } from '../../packages'
+import { Contact, Message } from '../../packages'
 export const defaultMenus = [
     {
         key: 'messages',
@@ -112,14 +112,14 @@ const msg = [
     '价格还能谈',
 ]
 export const messages = (count: number) => {
-    const arr = []
+    const arr: Message[] = []
     for(let i = count; i < count + 10; i++) {
         arr.push({
             id: i,
             time: new Date().getTime(),
             type: 'text',
             status: 'success',
-            content: msg[i] ? msg [i] : i,
+            content: msg[i] ? msg [i] : i + '',
             toContactId: i % 2 === 0 ? '66' : i,
             from: {
                 id: i % 2 === 0 ? '66' : i,

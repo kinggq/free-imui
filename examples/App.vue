@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, onMounted, reactive } from 'vue';
 import { defaultContacts, messages } from './_util/constant'
-import type { FreeInstance, Contact } from '../packages'
+import type { FreeInstance, Contact, PullMessageNext } from '../packages'
 
 const freeIM = ref<FreeInstance>()
 
@@ -18,7 +18,7 @@ onMounted(() => {
 })
 
 let _count = 0
-const pullMessages = (contact: Contact, next: any, count: number) => {
+const pullMessages = (contact: Contact, next: PullMessageNext, count: number) => {
   if (contact.id === 2) {
     setTimeout(() => {
       if (_count < 20) {
@@ -353,21 +353,23 @@ const toggleMessageName = () => {
         <tr>
           <td>pullMessages</td>
           <td>聊天窗口滚动到顶部时或首次打开该联系人窗口时触发。调用 next 方法结束 loading 状态，设置 end 为 true 将不在触发该事件</td>
-          <td>(contact: Contact, next: (messages: Message[], end: boolean) => void) => void</td>
+          <td>(contact: Contact, next: PullMessageNext) => void</td>
           <td></td>
         </tr>
         <tr>
           <td>send</td>
           <td>发送消息时触发</td>
           <td>
-            (contact: Contact, message: Message, next: Next) => void;
-            <br>
-            Next = (message: Message, contact: Contact, status: MessageStatus = 'success') => void
+            (contact: Contact, message: Message, next: SendNext) => void
           </td>
           <td></td>
         </tr>
       </tbody>
     </table>
+    <h2 class="free-doc-title">类型定义</h2>
+    <div class="free-doc-code">
+      import type { FreeInstance, Contact, PullMessageNext } from 'free-im';
+    </div>
   </div>
   
 </template>
@@ -387,6 +389,12 @@ const toggleMessageName = () => {
     color: #000;
     font-family: Avenir,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol,"Noto Color Emoji",sans-serif;
   }
+  &-code {
+    background: #f5f5f5;
+    margin: 16px 0;
+    padding: 12px 20px;
+    overflow: auto;
+  }
   table {
     font-size: 13px;
     width: 100%;
@@ -395,6 +403,9 @@ const toggleMessageName = () => {
     border-spacing: 0;
     border-collapse: collapse;
     font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+    tbody tr:hover {
+      background: rgba(60,90,100,.04);
+    }
     th {
       padding-top: 14px;
       border-width: 1px 0 2px 0;
