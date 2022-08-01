@@ -8,7 +8,6 @@ export default defineComponent({
         return () => {
             return (
                 <free-message-template
-                    class="free-message-image"
                     v-slots={{
                         content: (props: Message) => <span v-html={props.content} />
                     }}
