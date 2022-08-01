@@ -1,4 +1,4 @@
-# free-im
+# free-imui
 
 ## Project setup
 ```
