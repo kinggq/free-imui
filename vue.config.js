@@ -1,6 +1,7 @@
 const path = require('path')
  
 module.exports = {
+    publicPath: './',
     // 修改 pages 入口
     pages: {
         index: {
