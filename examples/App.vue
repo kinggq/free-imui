@@ -366,6 +366,62 @@ const toggleMessageName = () => {
         </tr>
       </tbody>
     </table>
+    <h2 class="free-doc-title">组件方法</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>方法名称</th>
+          <th>说明</th>
+          <th>类型</th>
+          <th>版本</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>useMenus</td>
+          <td>初始化导航</td>
+          <td>(menus: Menu[]) => void</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>initContacts</td>
+          <td>初始化联系人</td>
+          <td>(contacts: Contact[]) => void</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>appendMessage</td>
+          <td>添加一条消息</td>
+          <td>(message: Message) => void</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    <h2 class="free-doc-title">插槽</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>名称</th>
+          <th>说明</th>
+          <th>类型</th>
+          <th>版本</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>messages-fixed-top</td>
+          <td>近期联系人头部固定插槽</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>contact-detail</td>
+          <td>联系人详情插槽</td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
     <h2 class="free-doc-title">类型定义</h2>
     <div class="free-doc-code">
       import type { FreeInstance, Contact, PullMessageNext } from 'free-im';
