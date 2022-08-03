@@ -1,7 +1,7 @@
 
 import { defineComponent, ref, nextTick, ExtractPropTypes, inject, computed } from "vue";
 import { useExpose } from '../hooks/use-expose';
-import { makeArrayProp, makeBooleanProp, makeNumericProp } from '../utils'
+import { makeArrayProp, makeBooleanProp, makeNumberProp, makeNumericProp } from '../utils'
 import { Message } from "./types";
 
 const messagesProps = {
@@ -9,7 +9,8 @@ const messagesProps = {
     contactId: makeNumericProp(''),
     isEnd: makeBooleanProp(false),
     loading: makeBooleanProp(true),
-    messageName: makeBooleanProp(false)
+    messageName: makeBooleanProp(false),
+    timeRange: makeNumberProp(1)
 }
 
 export type MessageProps = ExtractPropTypes<typeof messagesProps>
@@ -52,6 +53,8 @@ export default defineComponent({
             return props.loading
         })
 
+        const intervalTime = computed(() => props.timeRange * 1000 * 60)
+
         useExpose({
             scrollToBottom
         })
@@ -72,6 +75,24 @@ export default defineComponent({
                     {
                         
                         props.data.map((message, index) => {
+                            const node = []
+                            const prev = props.data[index - 1]
+                            if (
+                                prev &&
+                                message.time - prev.time > intervalTime.value
+                            ) {
+                                node.push(
+                                    <free-message-event
+                                        {...{
+                                            message: {
+                                                id: '__time__',
+                                                type: 'event',
+                                                content: ''
+                                            }
+                                        }}
+                                    />
+                                )
+                            }
                             const tagName = `free-message-${message.type}`
                             console.log('tagName', tagName)
                             let attrs = {
