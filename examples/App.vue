@@ -73,14 +73,18 @@ const toggleMessageName = () => {
 </script>
 <template>
   <div class="free-doc">
-    <free-im ref="freeIM" @pullMessages="pullMessages" @send="send" :user-info="userInfo" :message-name="showMessageName">
-    
+    <free-im
+      ref="freeIM"
+      @pullMessages="pullMessages"
+      @send="send"
+      :user-info="userInfo"
+      :message-name="showMessageName"
+    >
       <template v-if="msgFixedTop" #messages-fixed-top>
         <div style="background-color: #FFF;">
-          <input type="text"
-            style="
-            
-            "
+          <input
+            type="text"
+            style=""
           >
         </div>
       </template>
