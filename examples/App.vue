@@ -359,27 +359,27 @@ const handleMessageClick = (e: Event, key: string, message: Message, instance: F
       </thead>
       <tbody>
         <tr>
-          <td>changeMenu</td>
+          <td>change-menu</td>
           <td>切换左侧选项卡时触发</td>
           <td>(menuName: string): void</td>
           <td></td>
         </tr>
         <tr>
-          <td>changeContact</td>
+          <td>change-contact</td>
           <td>切换近期联系人时触发</td>
           <td>(currentContact: Contact): void</td>
           <td></td>
         </tr>
         <tr>
-          <td>changeContact</td>
-          <td>切换近期联系人时触发</td>
-          <td>(currentContact: Contact): void</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>pullMessages</td>
+          <td>pull-messages</td>
           <td>聊天窗口滚动到顶部时或首次打开该联系人窗口时触发。调用 next 方法结束 loading 状态，设置 end 为 true 将不在触发该事件</td>
           <td>(contact: Contact, next: PullMessageNext) => void</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>message-click</td>
+          <td>消息点击事件</td>
+          <td>(e: Event, key: string, messgae: Message, instance: FreeInstance) => void</td>
           <td></td>
         </tr>
         <tr>
