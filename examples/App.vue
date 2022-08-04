@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, onMounted, reactive } from 'vue';
 import { defaultContacts, messages } from './_util/constant'
-import type { FreeInstance, Contact, PullMessageNext } from '../packages'
+import type { FreeInstance, Contact, PullMessageNext, Message } from '../packages'
 
 const freeIM = ref<FreeInstance>()
 
@@ -70,12 +70,17 @@ const toggleMessageName = () => {
   showMessageName.value = !showMessageName.value
 }
 
+const handleMessageClick = (e: Event, key: string, message: Message, instance: FreeInstance) => {
+  console.log(key)
+}
+
 </script>
 <template>
   <div class="free-doc">
     <free-im
       ref="freeIM"
       @pullMessages="pullMessages"
+      @message-click="handleMessageClick"
       @send="send"
       :user-info="userInfo"
       :message-name="showMessageName"
