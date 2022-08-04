@@ -72,6 +72,23 @@ const toggleMessageName = () => {
 
 const handleMessageClick = (e: Event, key: string, message: Message, instance: FreeInstance) => {
   console.log(key)
+  if (key === 'status') {
+    freeIM.value?.updateMessage({
+      id: message.id,
+      status: 'uploading',
+      content: '正在重新发送...',
+      toContactId: message.toContactId,
+    })
+
+    setTimeout(() => {
+      freeIM.value?.updateMessage({
+        id: message.id,
+        status: 'success',
+        content: message.content,
+        toContactId: message.toContactId,
+      })
+    }, 2000)
+  }
 }
 
 </script>

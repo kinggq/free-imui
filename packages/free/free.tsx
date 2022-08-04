@@ -15,6 +15,7 @@ import {
 import {
     makeNumericProp
 } from '../utils'
+import { UpdateMessage } from "./types";
 const freeProps = {
     width: makeNumericProp(860),
     height: makeNumericProp(580),
@@ -312,17 +313,16 @@ export default defineComponent({
         ){
             emit('send', contact, message, (message: Message, contact: Contact, status: MessageStatus = 'success') => {
                 next(contact)
-                updateMessage(message, contact, status)
+                updateMessage(Object.assign(message, { status }))
             }, file)
         }
         
-        function updateMessage(message: Message, contact: Contact, status: MessageStatus) {
-            console.log(message, contact)
-            if (messagesBucket.has(contact.id)) {
-                const index = messagesBucket.get(contact.id)?.findIndex(item => item.id === message.id)
-                console.log(index)
+        function updateMessage(message: UpdateMessage) {
+            if (messagesBucket.has(message.toContactId)) {
+                const index = messagesBucket.get(message.toContactId)?.findIndex(item => item.id === message.id)
                 if (index !== -1) {
-                    messagesBucket.get(contact.id)![index!].status = status
+                    const findMessage = messagesBucket.get(message.toContactId)![index!]
+                    messagesBucket.get(message.toContactId)![index!] = { ...findMessage, ...message, toContactId: findMessage.toContactId }
                 }
                 
             }
@@ -481,7 +481,8 @@ export default defineComponent({
         useExpose({
             useMenus,
             initContacts,
-            appendMessage
+            appendMessage,
+            updateMessage
         })
 
         return () => {
