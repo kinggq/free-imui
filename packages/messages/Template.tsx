@@ -12,7 +12,6 @@ export default defineComponent({
     name: 'free-message-template',
     props: templateProps,
     setup(props, { slots }) {
-        console.log('=------',props)
         return () => {
             return (
                 <div class={`free-message-content free-message-${ props.reverse ? 'right' : 'left'}`} key={ props.message.id }>

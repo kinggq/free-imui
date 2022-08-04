@@ -60,12 +60,7 @@ export default defineComponent({
         })
         
         return () => {
-            function innerMessages() {
-                return props.data.map((msg, index) => {
-                    
-                })
-            }
-            console.log(props.data)
+            
             return (
                 <div ref={ root } class="free-message" onScroll={ onScroll }>
                     <div class={`free-messages-loading`}>
@@ -77,12 +72,10 @@ export default defineComponent({
                         props.data.map((message, index) => {
                             const node = []
                             const prev = props.data[index - 1]
-                            console.log( !!props.data[index - 1], prev && message.time - prev.time > intervalTime.value)
                             if (
                                 prev &&
                                 message.time - prev.time > intervalTime.value
                             ) {
-                                console.log('------------------')
                                 node.push(
                                     <free-message-event
                                         {...{
@@ -95,8 +88,8 @@ export default defineComponent({
                                     />
                                 )
                             }
+
                             const tagName = `free-message-${message.type}`
-                            console.log('tagName', tagName)
                             let attrs = {
                                 message,
                                 reverse: userInfo.id === message.from.id,
