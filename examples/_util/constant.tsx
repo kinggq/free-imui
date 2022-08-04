@@ -128,5 +128,19 @@ export const messages = (count: number) => {
             }
         })
     }
+
+    arr.push({
+        type: 'event',
+        time: new Date().getTime(),
+        id: 1000,
+        status: 'success',
+        content: '',
+        toContactId: '',
+        from : {
+            id: '66',
+            nickname: '陈翔',
+            avatar: '陈翔', 
+        }
+    })
     return arr
 }

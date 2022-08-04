@@ -1,21 +1,22 @@
 import { defineComponent } from "vue";
 import { Message } from "./types";
+import { makeObjectProp } from '../utils'
+
+const eventProps = {
+    message: makeObjectProp<Message>()
+}
 
 export default defineComponent({
+    props: eventProps,
     name: 'free-message-event',
-    setup(_, { attrs }){
-        console.log('iauhsdouasdo', attrs)
-        const slots = {
-            content: (props: Message) => <img src={ props.content } />
-        }
-        console.log('image 组件')
+    setup(props){
         return () => {
             return (
-                <free-message-template
-                    class="free-message-event"
-                    v-slots={ slots }
-                    { ...attrs }
-                />
+                <div class="free-message-content free-message-event">
+                    <span class="free-message-event__content">
+                        { props.message.content }
+                    </span>
+                </div>
             )
         }
     }

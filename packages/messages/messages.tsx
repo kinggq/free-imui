@@ -1,7 +1,7 @@
 
 import { defineComponent, ref, nextTick, ExtractPropTypes, inject, computed } from "vue";
 import { useExpose } from '../hooks/use-expose';
-import { makeArrayProp, makeBooleanProp, makeNumberProp, makeNumericProp } from '../utils'
+import { makeArrayProp, makeBooleanProp, makeNumberProp, makeNumericProp, formatTime } from '../utils'
 import { Message } from "./types";
 
 const messagesProps = {
@@ -77,17 +77,19 @@ export default defineComponent({
                         props.data.map((message, index) => {
                             const node = []
                             const prev = props.data[index - 1]
+                            console.log( !!props.data[index - 1], prev && message.time - prev.time > intervalTime.value)
                             if (
                                 prev &&
                                 message.time - prev.time > intervalTime.value
                             ) {
+                                console.log('------------------')
                                 node.push(
                                     <free-message-event
                                         {...{
                                             message: {
                                                 id: '__time__',
                                                 type: 'event',
-                                                content: ''
+                                                content: formatTime(message.time)
                                             }
                                         }}
                                     />
@@ -100,13 +102,22 @@ export default defineComponent({
                                 reverse: userInfo.id === message.from.id,
                                 messageName: props.messageName,
                             }
-                            return (
+                            
+                            node.push(
                                 message.type === 'image' ?
                                 <free-message-image { ...attrs } />
                                 : message.type === 'file' ?
                                 <free-message-file { ...attrs } />
+                                : message.type === 'event' ? 
+                                <free-message-event { ...{ message: {
+                                    id: '__time__',
+                                    type: 'event',
+                                    content: formatTime(message.time)
+                                } } } />
                                 : <free-message-text { ...attrs } />
                             )
+
+                            return node
                         })
                     }
                 </div>

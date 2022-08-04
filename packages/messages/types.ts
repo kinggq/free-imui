@@ -4,7 +4,7 @@ import { User } from '../free/types'
 
 export type MessageStatus = 'success' | 'error' | 'uploading'
 
-export type MessageType = 'text' | 'image' | 'file'
+export type MessageType = 'text' | 'image' | 'file' | 'event'
 
 export type Message = {
     id: string | number
