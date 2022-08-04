@@ -1,5 +1,5 @@
 import { App } from 'vue'
-import Avatar from './avatar'
+import Avatar from './Avatar'
 
 Avatar.install = (app: App) => {
     app.component(Avatar.name, Avatar)

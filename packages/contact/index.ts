@@ -1,5 +1,5 @@
 import { withInstall } from '../utils'
-import _Contact from './contact'
+import _Contact from './Contact'
 
 export const FreeContact = withInstall(_Contact)
 
