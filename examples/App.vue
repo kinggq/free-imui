@@ -114,6 +114,22 @@ const toggleMenuAvatar = () => {
   menuAvatar.value = !menuAvatar.value
 }
 
+const updateMessage = () => {
+  const messages = freeIM.value?.getCurrentMessages.value || []
+  console.log(messages)
+  if (messages.length > 0) {
+    const message = messages[messages.length - 1]
+    freeIM.value?.updateMessage({
+      id: message.id,
+      toContactId: message.toContactId,
+      type: 'file',
+      fileName: '这条消息被修改了',
+      fileSize: 8000
+    })
+    freeIM.value?.scrollToBottom()
+  }
+}
+
 </script>
 <template>
   <div class="free-doc">
@@ -141,6 +157,7 @@ const toggleMenuAvatar = () => {
     </free-im>
     <div class="free-doc-buttons">
       <free-button @click="appendMessage">发送一条消息</free-button>
+      <free-button @click="updateMessage">修改消息</free-button>
       <free-button @click="toggleMessageTop">消息列表头部插槽</free-button>
       <free-button @click="toggleMessageName">显示隐藏聊天窗口内名字</free-button>
       <free-button @click="toggleAvatarShape">切换头像形状</free-button>
@@ -467,6 +484,18 @@ const toggleMenuAvatar = () => {
           <td>updateContact</td>
           <td>修改联系人信息, 根据 ContactId 修改</td>
           <td>(contact: ContactUpdate) => void</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>getCurrentMessages</td>
+          <td>获取当前聊天窗口消息</td>
+          <td>ComputedRef&lt;Message[]&gt;</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>scrollToBottom</td>
+          <td>将聊天窗口滚动到最底部</td>
+          <td>() => void</td>
           <td></td>
         </tr>
       </tbody>
