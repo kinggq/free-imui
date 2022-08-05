@@ -59,6 +59,11 @@ export default defineComponent({
             return contacts.value.find(contact => contact.id === currentContactId.value)
         })
 
+        const getCurrentMessages = computed(() => {
+            if (!currentContactId.value) return []
+            return messagesBucket.get(currentContactId.value) || []
+        })
+
         const lastMessages = computed(() => {
             const data = contacts.value.filter(contact => contact.lastMessage)
             data.sort((c1, c2) => {
@@ -492,7 +497,8 @@ export default defineComponent({
             initContacts,
             appendMessage,
             updateMessage,
-            updateContact
+            updateContact,
+            getCurrentMessages
         })
 
         return () => {
