@@ -1,6 +1,6 @@
 import { defineComponent, ExtractPropTypes, reactive, ref, nextTick, computed } from "vue";
 import { useMenus } from '../hooks'
-import { isFunction, makeObjectProp, guid, isArray, makeBooleanProp, makeStringProp } from '../utils'
+import { isFunction, makeObjectProp, guid, isArray, makeBooleanProp, makeStringProp, isString } from '../utils'
 import { MenuType } from "../utils/types";
 import { useExpose } from "../hooks/use-expose";
 import { Contact } from '../contact/types'
@@ -335,9 +335,15 @@ export default defineComponent({
             delete data.id
             const index = findContactById(id)
             if (index !== -1) {
-                if (data.unread) {
-                    data.unread = data.unread + contacts.value[index].unread
+                const { unread } = data
+                if (isString(unread)) {
+                    if (unread.indexOf('+') === 0 || unread.indexOf('-') === 0) {
+                        data.unread = parseInt(unread) + contacts.value[index].unread
+                    }
                 }
+                // if (data.unread) {
+                //     data.unread = data.unread + contacts.value[index].unread
+                // }
                 contacts.value[index] = { ...contacts.value[index], ...data }
             }
         }
@@ -354,7 +360,7 @@ export default defineComponent({
             if (!messagesBucket.has(message.toContactId)) {
                 updateContact({
                     id: message.toContactId,
-                    unread: 1,
+                    unread: '+1',
                     lastMessageTime: message.time,
                     lastMessage: lastMessageRender(message)
                 })
@@ -366,12 +372,12 @@ export default defineComponent({
                     lastMessageTime: message.time,
                     lastMessage: lastMessageRender(message),
                     lastMessageStatus: message.status,
-                    unread: 0
+                    unread: ''
                 }
                 if (message.toContactId === currentContactId.value) {
                     msgRef.value?.scrollToBottom()
                 } else {
-                    updateContactData.unread = 1
+                    updateContactData.unread = '+1'
                 }
                 updateContact(updateContactData)
             }
@@ -484,7 +490,8 @@ export default defineComponent({
             useMenus,
             initContacts,
             appendMessage,
-            updateMessage
+            updateMessage,
+            updateContact
         })
 
         return () => {

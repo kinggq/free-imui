@@ -1,12 +1,13 @@
 import { ComponentPublicInstance } from "vue"
-import { Contact } from '../contact/types'
+import { Contact, ContactUpdate } from '../contact/types'
 import type { FProps } from './Free'
 import type { Message, MessageStatus, MessageType } from '../index'
 
 type FreeIMExpose = {
-    initContacts: (contacts: Contact[]) => void,
-    appendMessage: (message: Message) => void,
+    initContacts: (contacts: Contact[]) => void
+    appendMessage: (message: Message) => void
     updateMessage: (message: UpdateMessage) => void
+    updateContact: (contact: ContactUpdate) => void
 }
 
 export type UpdateMessage = {
