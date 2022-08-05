@@ -109,6 +109,11 @@ const updateContact = () => {
   })
 }
 
+const menuAvatar = ref(true)
+const toggleMenuAvatar = () => {
+  menuAvatar.value = !menuAvatar.value
+}
+
 </script>
 <template>
   <div class="free-doc">
@@ -119,6 +124,7 @@ const updateContact = () => {
       @send="send"
       :shape="shape"
       :user-info="userInfo"
+      :menu-avatar="menuAvatar"
       :message-name="showMessageName"
     >
       <template v-if="msgFixedTop" #messages-fixed-top>
@@ -139,6 +145,7 @@ const updateContact = () => {
       <free-button @click="toggleMessageName">显示隐藏聊天窗口内名字</free-button>
       <free-button @click="toggleAvatarShape">切换头像形状</free-button>
       <free-button @click="updateContact">修改联系人信息</free-button>
+      <free-button @click="toggleMenuAvatar">切换左侧菜单头像显示</free-button>
     </div>
 
     <h2 class="free-doc-title">API</h2>
@@ -367,10 +374,17 @@ const updateContact = () => {
           <td></td>
         </tr>
         <tr>
-          <td>messageName</td>
-          <td>是否隐藏聊天窗口内的联系人名称</td>
+          <td>message-name</td>
+          <td>是否显示聊天窗口内的联系人名称</td>
           <td>boolean</td>
           <td>false</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>menu-avatar</td>
+          <td>是否显示左侧菜单头像</td>
+          <td>boolean</td>
+          <td>true</td>
           <td></td>
         </tr>
       </tbody>
