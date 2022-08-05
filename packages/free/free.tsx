@@ -22,7 +22,8 @@ const freeProps = {
     height: makeNumericProp(580),
     shape: makeStringProp<'circle' | 'square'>('square'),
     userInfo: makeObjectProp<User>(),
-    messageName: makeBooleanProp(false)
+    messageName: makeBooleanProp(false),
+    menuAvatar: makeBooleanProp(true)
 }
 
 export type FProps = ExtractPropTypes<typeof freeProps>
@@ -107,7 +108,7 @@ export default defineComponent({
             return (
                 <div class="free-menu">
                     <div class="free-menu-top">
-                        <free-avatar class="free-menu-avatar" avatar={ props.userInfo.avatar } />
+                        <free-avatar v-show={ props.menuAvatar } class="free-menu-avatar" avatar={ props.userInfo.avatar } />
                         {renderMenuItem().top}
                     </div>
                     <div class="free-menu-bottom">
