@@ -1,0 +1,178 @@
+.free-wrapper {
+    font-size: 14px;
+    color: #333;
+    font-family: Microsoft YaHei;
+    background-color: #eee;
+    border-radius: 6px;
+    display: flex;
+    border: 1px solid #f0f0f0;
+    position: relative;
+    .free-menu {
+        width: 60px;
+        height: 100%;
+        flex: none;
+        background: #448BE2;
+        border-radius: 6px 0 0 6px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 0;
+        .free-menu-top {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            .free-menu-avatar {
+                margin-bottom: 30px;
+                background-color: #fff;
+                color: #1890FF;
+            }
+            .free-menu-item {
+                margin: 15px 0;
+                cursor: pointer;
+                &.free-menu-active i {
+                    color: #fff;
+                }
+            }
+        }
+        .free-menu-bottom {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .free-icon-messages,
+        .free-icon-contacts,
+        .free-icon-menu {
+            font-family: 'iconfont';
+            font-size: 24px;
+            color: #9AC4F8;
+            
+        }
+        .free-icon-messages:before {
+            content: "\e622";
+        }
+        .free-icon-contacts:before {
+            content: "\e60f";
+        }
+        .free-icon-menu:before {
+            content: "\e626";
+        }
+    }
+    .free-sidebar {
+        width: 230px;
+        height: 100%;
+        flex: none;
+        position: relative;
+        background-color: #F8F8F9;
+        overflow-y: auto;
+        border-right: 1px solid #f0f0f0;
+        .free-messages-fiexd_top {
+            position: sticky;
+            top: 0;
+        }
+        .free-index {
+            font-size: 12px;
+            color: #666;
+            padding-left: 10px;
+        }
+        .free-contact-category-label {
+            font-size: 12px;
+            color: #666;
+            padding-left: 10px;
+            padding: 10px;
+        }
+    }
+    .free-content {
+        flex: 1;
+        border-radius: 0 6px 6px 0;
+        .free-contact-main {
+            height: 100%;
+            background-color: #F1F1F1;
+            border-radius: 0 6px 6px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            .free-contact-detail_header {
+                height: 200px;
+                position: relative;
+                overflow: hidden;
+                z-index: 1;
+                display: flex;
+                padding-left: 100px;
+                align-items: center;
+                font-size: 20px;
+                color: #333;
+                &:before {
+                    width: 140%;
+                    height: 200px;
+                    position: absolute;
+                    border-radius: 0 0 50% 50%;
+                    background-color: #F1F8FF;
+                    left: -20%;
+                    top: 0;
+                    z-index: -1;
+                    content: '';
+                }
+                .free-contact-nickname {
+                    margin-left: 20px;
+                }
+                .free-avatar {
+                    width: 60px;
+                    height: 60px;
+                    line-height: 60px;
+                    font-size: 16px;
+                }
+            }
+            .free-contact-detail_footer {
+                display: flex;
+                justify-content: center;
+                margin-bottom: 50px;
+            }
+            .free-contact-messages_header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 15px;
+            }
+            .free-contact-messages_body {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+                .free-editor {
+                    height: 180px;
+                }
+            }
+        }
+        .free-icon-more {
+            font-family: 'iconfont';
+            font-size: 20px;
+            color: #aaa;
+            cursor: pointer;
+            &:hover {
+                color: #333;
+            }
+            &:before {
+                content: "\e600";
+            }
+        }
+    }
+    
+}
+.free-icon-loading {
+    border: 2px solid #fff;
+    border-top: 2px solid #aaa;
+    border-left: 2px solid #aaa;
+    border-bottom: 2px solid #aaa;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    animation: spin .8s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.free-theme-default {}
