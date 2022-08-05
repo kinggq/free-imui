@@ -98,6 +98,17 @@ const toggleAvatarShape = () => {
   console.log(shape.value)
 }
 
+const nikename1 = ref('猪小明')
+const updateContact = () => {
+  nikename1.value += 1
+  freeIM.value?.updateContact({
+    id: '1',
+    nickname: nikename1.value,
+    unread: 6,
+    lastMessage: '修改了联系人信息'
+  })
+}
+
 </script>
 <template>
   <div class="free-doc">
@@ -127,6 +138,7 @@ const toggleAvatarShape = () => {
       <free-button @click="toggleMessageTop">消息列表头部插槽</free-button>
       <free-button @click="toggleMessageName">显示隐藏聊天窗口内名字</free-button>
       <free-button @click="toggleAvatarShape">切换头像形状</free-button>
+      <free-button @click="updateContact">修改联系人信息</free-button>
     </div>
 
     <h2 class="free-doc-title">API</h2>
@@ -435,6 +447,12 @@ const toggleAvatarShape = () => {
           <td>appendMessage</td>
           <td>添加一条消息</td>
           <td>(message: Message) => void</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>updateContact</td>
+          <td>修改联系人信息, 根据 ContactId 修改</td>
+          <td>(contact: ContactUpdate) => void</td>
           <td></td>
         </tr>
       </tbody>
