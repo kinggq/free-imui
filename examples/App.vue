@@ -91,15 +91,22 @@ const handleMessageClick = (e: Event, key: string, message: Message, instance: F
   }
 }
 
+const shape = ref('square')
+const toggleAvatarShape = () => {
+  shape.value === 'square' ?
+  (shape.value = 'circle') : (shape.value = 'square') 
+  console.log(shape.value)
+}
+
 </script>
 <template>
   <div class="free-doc">
     <free-im
-      shape="circle"
       ref="freeIM"
       @pullMessages="pullMessages"
       @message-click="handleMessageClick"
       @send="send"
+      :shape="shape"
       :user-info="userInfo"
       :message-name="showMessageName"
     >
@@ -119,6 +126,7 @@ const handleMessageClick = (e: Event, key: string, message: Message, instance: F
       <free-button @click="appendMessage">发送一条消息</free-button>
       <free-button @click="toggleMessageTop">消息列表头部插槽</free-button>
       <free-button @click="toggleMessageName">显示隐藏聊天窗口内名字</free-button>
+      <free-button @click="toggleAvatarShape">切换头像形状</free-button>
     </div>
 
     <h2 class="free-doc-title">API</h2>
@@ -337,6 +345,13 @@ const handleMessageClick = (e: Event, key: string, message: Message, instance: F
           <td>高度</td>
           <td>string | number</td>
           <td>580</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>shape</td>
+          <td>指定头像形状</td>
+          <td>circle | square</td>
+          <td>square</td>
           <td></td>
         </tr>
         <tr>
