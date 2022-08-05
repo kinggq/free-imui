@@ -1,5 +1,6 @@
 import { withInstall } from '../utils'
 import _FreeIM from './Free'
+import './index.less'
 
 // FreeIM.install = (app: App) => {
 //     app.component(FreeIM.name, FreeIM)

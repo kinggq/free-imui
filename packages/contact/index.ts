@@ -1,5 +1,6 @@
 import { withInstall } from '../utils'
 import _Contact from './Contact'
+import './index.less'
 
 export const FreeContact = withInstall(_Contact)
 
