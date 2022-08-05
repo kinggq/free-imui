@@ -178,6 +178,10 @@ export default defineComponent({
             }
         }
 
+        function scrollToBottom() {
+            msgRef.value && msgRef.value.scrollToBottom()
+        }
+
         function renderMessages() {
             const click = (contact: Contact) => {
                 updateUnread(contact)
@@ -498,7 +502,8 @@ export default defineComponent({
             appendMessage,
             updateMessage,
             updateContact,
-            getCurrentMessages
+            getCurrentMessages,
+            scrollToBottom
         })
 
         return () => {
