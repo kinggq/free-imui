@@ -95,6 +95,7 @@ const handleMessageClick = (e: Event, key: string, message: Message, instance: F
 <template>
   <div class="free-doc">
     <free-im
+      shape="circle"
       ref="freeIM"
       @pullMessages="pullMessages"
       @message-click="handleMessageClick"
