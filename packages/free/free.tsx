@@ -1,6 +1,6 @@
 import { defineComponent, ExtractPropTypes, reactive, ref, nextTick, computed } from "vue";
 import { useMenus } from '../hooks'
-import { isFunction, makeObjectProp, guid, isArray, makeBooleanProp } from '../utils'
+import { isFunction, makeObjectProp, guid, isArray, makeBooleanProp, makeStringProp } from '../utils'
 import { MenuType } from "../utils/types";
 import { useExpose } from "../hooks/use-expose";
 import { Contact } from '../contact/types'
@@ -16,9 +16,11 @@ import {
     makeNumericProp
 } from '../utils'
 import { UpdateMessage } from "./types";
+
 const freeProps = {
     width: makeNumericProp(860),
     height: makeNumericProp(580),
+    shape: makeStringProp<'circle' | 'square'>('square'),
     userInfo: makeObjectProp<User>(),
     messageName: makeBooleanProp(false)
 }
