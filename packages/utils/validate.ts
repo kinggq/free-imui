@@ -1,4 +1,5 @@
 export const isArray = Array.isArray
+export const isString = (val: unknown) => typeof val === 'string'
 export const isFunction = (val: unknown): val is Function => typeof val === 'function'
 export const extend = Object.assign
 export const camelize = (str: string): string =>
