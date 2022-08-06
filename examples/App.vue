@@ -130,6 +130,11 @@ const updateMessage = () => {
   }
 }
 
+const showMenu = ref(true)
+const handleShowMenu = () => {
+  showMenu.value = !showMenu.value
+}
+
 </script>
 <template>
   <div class="free-doc">
@@ -139,6 +144,7 @@ const updateMessage = () => {
       @message-click="handleMessageClick"
       @send="send"
       :shape="shape"
+      :show-menu="showMenu"
       :user-info="userInfo"
       :menu-avatar="menuAvatar"
       :message-name="showMessageName"
@@ -163,6 +169,7 @@ const updateMessage = () => {
       <free-button @click="toggleAvatarShape">切换头像形状</free-button>
       <free-button @click="updateContact">修改联系人信息</free-button>
       <free-button @click="toggleMenuAvatar">切换左侧菜单头像显示</free-button>
+      <free-button @click="handleShowMenu">切换左侧菜单展示</free-button>
     </div>
 
     <h2 class="free-doc-title">API</h2>
@@ -400,6 +407,13 @@ const updateMessage = () => {
         <tr>
           <td>menu-avatar</td>
           <td>是否显示左侧菜单头像</td>
+          <td>boolean</td>
+          <td>true</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>show-menu</td>
+          <td>是否展示左侧菜单</td>
           <td>boolean</td>
           <td>true</td>
           <td></td>

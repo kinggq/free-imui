@@ -21,6 +21,7 @@ const freeProps = {
     width: makeNumericProp(860),
     height: makeNumericProp(580),
     shape: makeStringProp<'circle' | 'square'>('square'),
+    showMenu: makeBooleanProp(true),
     userInfo: makeObjectProp<User>(),
     messageName: makeBooleanProp(false),
     menuAvatar: makeBooleanProp(true)
@@ -510,7 +511,9 @@ export default defineComponent({
             return (
                 <div class={`free-wrapper free-theme-default`} style={wrapper_style}>
                     
-                    {renderMenu()}
+                    {
+                        props.showMenu && renderMenu()
+                    }
                     {renderSidebar()}
                     {renderContent()}
                 </div>
