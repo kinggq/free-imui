@@ -554,6 +554,7 @@ const handleShowMenu = () => {
     padding: 20px 0;
     button {
       margin-right: 10px;
+      margin-bottom: 10px;
     }
   }
   &-title {
