@@ -1,7 +1,7 @@
 {
-  "name": "free-im",
+  "name": "free-imui",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "description": "基于VUE3实现的即时通讯UI组件",
   "main": "lib/index.min.js",
   "module": "lib/index.esm.js",
