@@ -1,13 +1,15 @@
+
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import path from 'path'
-// import commonjs from '@rollup/plugin-commonjs'
 import { terser } from 'rollup-plugin-terser'
 import typescript from 'rollup-plugin-typescript2'
 import pkg from '../package.json'
+import babel from '@rollup/plugin-babel'
+import postcss from 'rollup-plugin-postcss'
 const deps = Object.keys(pkg.dependencies)
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const vue = require('rollup-plugin-vue')
-
+const extensions = [".ts", ".js", ".tsx", '.jsx', '.vue']
 export default [
     {
         input: path.resolve(__dirname, '../packages/index.ts'),
@@ -18,14 +20,6 @@ export default [
             }
         ],
         plugins: [
-            terser(),
-            nodeResolve(),
-            // commonjs(),
-            vue({
-                target: 'browser',
-                css: false,
-                exposeFilename: false,
-            }),
             typescript({
                 tsconfigOverride: {
                     compilerOptions: {
@@ -42,6 +36,16 @@ export default [
                 },
                 abortOnError: false,
             }),
+            terser(),
+            nodeResolve(),
+            postcss(),
+            vue({
+                target: 'browser',
+                css: false,
+                exposeFilename: false,
+            }),
+            babel({ babelHelpers: "bundled", extensions }),
+            
         ],
         external(id) {
             return /^vue/.test(id)
