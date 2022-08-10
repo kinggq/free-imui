@@ -1,4 +1,4 @@
-import { defineComponent, toRefs } from "vue";
+import { defineComponent } from "vue";
 import { Contact } from "./types";
 import { makeObjectProp, makeBooleanProp, formatDay } from '../utils'
 const contactProps = {
