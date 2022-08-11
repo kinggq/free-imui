@@ -1,6 +1,6 @@
 {
   "name": "free-imui",
-  "version": "0.1.9",
+  "version": "0.1.17",
   "private": false,
   "description": "基于VUE3实现的即时通讯UI组件",
   "main": "lib/index.min.js",
@@ -41,6 +41,7 @@
     "postcss": "8.1.9",
     "postcss-import": "12.0.1",
     "rollup": "2.58.0",
+    "rollup-plugin-font": "^1.1.2",
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-terser": "7.0.2",
     "rollup-plugin-typescript2": "^0.32.1",
