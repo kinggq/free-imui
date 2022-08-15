@@ -1,11 +1,10 @@
 {
   "name": "free-imui",
-  "version": "0.1.17",
+  "version": "0.1.22",
   "private": false,
   "description": "基于VUE3实现的即时通讯UI组件",
-  "main": "lib/index.min.js",
-  "module": "lib/index.esm.js",
-  "typings": "lib/index.d.ts",
+  "main": "dist/index.umd.min.js",
+  "types": "dist/index.d.ts",
   "keyword": "vue3 imui typescript",
   "license": "MIT",
   "author": {
@@ -14,11 +13,9 @@
   },
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "yarn build:clean && yarn build:lib && yarn build:esm-bundle && rimraf lib/demo.html",
+    "build": "yarn build:clean && yarn build:lib",
     "build:clean": "rimraf lib",
-    "build:lib": "vue-cli-service build --target lib --name index --dest lib packages/index.ts",
-    "build:esm-bundle": "rollup --config ./build/rollup.config.js",
-    "build:doc": "vue-cli-service build"
+    "build:lib": "vue-cli-service build --target lib --name index packages/index.ts"
   },
   "dependencies": {
     "core-js": "^3.6.5",
@@ -29,8 +26,6 @@
     "@babel/plugin-transform-runtime": "^7.18.10",
     "@babel/preset-env": "^7.18.10",
     "@babel/runtime": "^7.18.9",
-    "@rollup/plugin-babel": "^5.3.1",
-    "@rollup/plugin-node-resolve": "^13.3.0",
     "@vue/cli-plugin-babel": "~4.5.13",
     "@vue/cli-plugin-typescript": "~4.5.13",
     "@vue/cli-service": "~4.5.13",
@@ -38,14 +33,7 @@
     "babel-loader": "^8.2.5",
     "less": "^3.0.4",
     "less-loader": "^5.0.0",
-    "postcss": "8.1.9",
-    "postcss-import": "12.0.1",
-    "rollup": "2.58.0",
-    "rollup-plugin-font": "^1.1.2",
-    "rollup-plugin-postcss": "^4.0.2",
-    "rollup-plugin-terser": "7.0.2",
-    "rollup-plugin-typescript2": "^0.32.1",
-    "rollup-plugin-vue": "6.0.0",
-    "typescript": "4.1.5"
+    "typescript": "4.1.5",
+    "vue-dts-gen": "^0.3.0"
   }
 }
