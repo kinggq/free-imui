@@ -6,11 +6,23 @@
   "main": "dist/index.umd.min.js",
   "types": "dist/index.d.ts",
   "keyword": "vue3 imui typescript",
+  "keywords": [
+    "vue",
+    "vue3",
+    "typescript",
+    "im",
+    "chat",
+    "vueim",
+    "vue3im",
+    "vuechat",
+    "webim",
+    "vue ts im",
+    "imui",
+    "vue3 imui",
+    "vue3 im ts"
+  ],
   "license": "MIT",
-  "author": {
-    "name": "King",
-    "email": ""
-  },
+  "author": "King<https://github.com/kinggq>",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "yarn build:clean && yarn build:lib",
