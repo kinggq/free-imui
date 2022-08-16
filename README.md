@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/kinggq/free-imui">🧑‍💻 Interactive Docs <sup>Beta</sup></a>
+  <a href="https://kinggq.github.io/free-imui/">🧑‍💻 Interactive Docs <sup>Beta</sup></a>
 </p>
 
 <br>
