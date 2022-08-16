@@ -55,3 +55,6 @@ const userInfo = {
 }
 </script>
 ```
+
+## License
+[MIT](./LICENSE) License &copy; 2022-PRESENT [King](https://github.com/kinggq)
