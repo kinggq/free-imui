@@ -28,37 +28,36 @@
     &::-webkit-scrollbar-track {
         background-color: transparent;
     }
-    .free-message-right {
+    &-right {
         flex-direction: row-reverse;
-        .free-message-info {
-            padding-right: 10px;
-        }
-        .free-message-username {
-            text-align: right;
-        }
         .free-message-content__text:before {
             right: -3px;
         }
     }
-    .free-message-left {
-        .free-message-info {
-            // padding-left: 10px;
-        }
-        .free-message-username {
-            text-align: left;
-        }
+    &-info {
+        padding-right: 10px;
+    }
+    &-username {
+        text-align: right;
+    }
+    
+    &-left {
         .free-message-content__text:before {
             left: -3px;
         }
     }
-    .free-message-content {
+    &-username {
+        text-align: left;
+    }
+    
+    &-content {
         display: flex;
         img {
             height: 100px;
-
+            max-width: 300px;
         }
     }
-    .free-message-image {
+    &-image {
         .free-message-content__text {
             padding: 0;
             background-color: transparent !important;
@@ -67,17 +66,17 @@
             display: none;
         }
     }
-    .free-message-username {
+    &-username {
         color: #5A5A5A;
         font-size: 12px;
         padding-bottom: 4px;
     }
-    .free-message-content__wrap {
+    &-content__wrap {
         display: flex;
         flex-direction: row-reverse;
         align-items: center;
     }
-    .free-message-right {
+    &-right {
         .free-message-content__text {
             background-color: #7BE96A;
             &:before {
@@ -85,7 +84,7 @@
             }
         }
     }
-    .free-message-left {
+    &-left {
         .free-message-content__text {
             background-color: #fff;
             &:before {
@@ -93,7 +92,7 @@
             }
         }
     }
-    .free-message-content__text {
+    &-content__text {
         border-radius: 4px;
         padding: 8px 10px;
         position: relative;
